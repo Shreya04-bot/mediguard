@@ -1,0 +1,226 @@
+{
+  "version": "1.0",
+  "description": "20-question Prakriti (body constitution) assessment based on classical Ayurvedic tridosha theory",
+  "questions": [
+    {
+      "id": 1,
+      "category": "Physical",
+      "question_en": "How would you describe your body frame?",
+      "question_hi": "आप अपनी शरीर की बनावट कैसे बताएंगे?",
+      "options": [
+        {"text_en": "Thin, light, hard to gain weight", "text_hi": "पतला, हल्का, वजन बढ़ाना मुश्किल", "dosha": "vata", "score": 3},
+        {"text_en": "Medium build, muscular", "text_hi": "मध्यम बनावट, मांसपेशीय", "dosha": "pitta", "score": 3},
+        {"text_en": "Large, stocky, tendency to gain weight", "text_hi": "बड़ा, भारी, वजन बढ़ने की प्रवृत्ति", "dosha": "kapha", "score": 3}
+      ]
+    },
+    {
+      "id": 2,
+      "category": "Physical",
+      "question_en": "What is your skin type usually like?",
+      "question_hi": "आपकी त्वचा आमतौर पर कैसी रहती है?",
+      "options": [
+        {"text_en": "Dry, rough, thin, cool to touch", "text_hi": "रूखी, खुरदरी, पतली, छूने पर ठंडी", "dosha": "vata", "score": 3},
+        {"text_en": "Warm, oily, sensitive, prone to rashes", "text_hi": "गर्म, तैलीय, संवेदनशील, दाने होने की प्रवृत्ति", "dosha": "pitta", "score": 3},
+        {"text_en": "Thick, moist, smooth, cool and pale", "text_hi": "मोटी, नम, चिकनी, ठंडी और पीली", "dosha": "kapha", "score": 3}
+      ]
+    },
+    {
+      "id": 3,
+      "category": "Physical",
+      "question_en": "How is your hair?",
+      "question_hi": "आपके बाल कैसे हैं?",
+      "options": [
+        {"text_en": "Dry, brittle, frizzy, tends to split", "text_hi": "रूखे, भंगुर, उलझे हुए", "dosha": "vata", "score": 3},
+        {"text_en": "Fine, straight, oily, early greying", "text_hi": "पतले, सीधे, तैलीय, जल्दी सफेद होने वाले", "dosha": "pitta", "score": 3},
+        {"text_en": "Thick, wavy, lustrous, oily", "text_hi": "घने, लहरदार, चमकदार, तैलीय", "dosha": "kapha", "score": 3}
+      ]
+    },
+    {
+      "id": 4,
+      "category": "Digestion",
+      "question_en": "How is your appetite and digestion?",
+      "question_hi": "आपकी भूख और पाचन कैसा है?",
+      "options": [
+        {"text_en": "Variable appetite, irregular digestion, gas/bloating", "text_hi": "अनियमित भूख, पेट में गैस/फूलना", "dosha": "vata", "score": 3},
+        {"text_en": "Strong appetite, cannot skip meals, good digestion", "text_hi": "तेज भूख, खाना न छोड़ सकें, अच्छा पाचन", "dosha": "pitta", "score": 3},
+        {"text_en": "Slow but steady appetite, heavy after eating", "text_hi": "धीमी लेकिन स्थिर भूख, खाने के बाद भारीपन", "dosha": "kapha", "score": 3}
+      ]
+    },
+    {
+      "id": 5,
+      "category": "Digestion",
+      "question_en": "Your bowel movements are usually:",
+      "question_hi": "आपकी मलत्याग की आदत सामान्यतः कैसी है?",
+      "options": [
+        {"text_en": "Irregular, hard, dry, tendency to constipation", "text_hi": "अनियमित, कड़ा, सूखा, कब्ज की प्रवृत्ति", "dosha": "vata", "score": 3},
+        {"text_en": "Regular, soft, sometimes loose, yellowish", "text_hi": "नियमित, नरम, कभी-कभी ढीला, पीला", "dosha": "pitta", "score": 3},
+        {"text_en": "Regular, slow, heavy, pale", "text_hi": "नियमित, धीमा, भारी, हल्के रंग का", "dosha": "kapha", "score": 3}
+      ]
+    },
+    {
+      "id": 6,
+      "category": "Sleep",
+      "question_en": "How do you sleep?",
+      "question_hi": "आप कैसे सोते हैं?",
+      "options": [
+        {"text_en": "Light sleeper, easily disturbed, insomnia possible", "text_hi": "हल्की नींद, जल्दी जाग जाना, अनिद्रा संभव", "dosha": "vata", "score": 3},
+        {"text_en": "Moderate, need 6-8 hours, sharp dreams", "text_hi": "मध्यम, 6-8 घंटे, स्पष्ट सपने", "dosha": "pitta", "score": 3},
+        {"text_en": "Deep, heavy sleeper, hard to wake, love sleeping", "text_hi": "गहरी, भारी नींद, उठना मुश्किल, सोना पसंद", "dosha": "kapha", "score": 3}
+      ]
+    },
+    {
+      "id": 7,
+      "category": "Mental",
+      "question_en": "How is your memory?",
+      "question_hi": "आपकी याददाश्त कैसी है?",
+      "options": [
+        {"text_en": "Quick to learn, quick to forget", "text_hi": "जल्दी सीखना, जल्दी भूलना", "dosha": "vata", "score": 3},
+        {"text_en": "Sharp, accurate, good memory for details", "text_hi": "तेज, सटीक, विवरण अच्छी तरह याद", "dosha": "pitta", "score": 3},
+        {"text_en": "Slow to learn but retains very well long-term", "text_hi": "धीरे सीखना लेकिन लंबे समय तक याद", "dosha": "kapha", "score": 3}
+      ]
+    },
+    {
+      "id": 8,
+      "category": "Mental",
+      "question_en": "How do you handle stress?",
+      "question_hi": "आप तनाव कैसे संभालते हैं?",
+      "options": [
+        {"text_en": "Become anxious, worried, fearful", "text_hi": "चिंतित, घबराया हुआ, डरा हुआ", "dosha": "vata", "score": 3},
+        {"text_en": "Become irritable, angry, critical", "text_hi": "चिड़चिड़ा, गुस्सैल, आलोचनात्मक", "dosha": "pitta", "score": 3},
+        {"text_en": "Withdraw, become quiet, avoid conflict", "text_hi": "अलग हो जाना, शांत रहना, संघर्ष से बचना", "dosha": "kapha", "score": 3}
+      ]
+    },
+    {
+      "id": 9,
+      "category": "Mental",
+      "question_en": "Your speaking style is:",
+      "question_hi": "आपकी बोलने की शैली कैसी है?",
+      "options": [
+        {"text_en": "Fast, talkative, may lose track of thought", "text_hi": "तेज, बातूनी, विचार भटक सकते हैं", "dosha": "vata", "score": 3},
+        {"text_en": "Sharp, concise, convincing, sometimes sharp-tongued", "text_hi": "तीक्ष्ण, संक्षिप्त, आश्वस्त करने वाला", "dosha": "pitta", "score": 3},
+        {"text_en": "Slow, deliberate, melodious, thoughtful", "text_hi": "धीमा, सोच-समझकर, मधुर, विचारशील", "dosha": "kapha", "score": 3}
+      ]
+    },
+    {
+      "id": 10,
+      "category": "Physical",
+      "question_en": "Your energy levels through the day:",
+      "question_hi": "दिन भर आपके ऊर्जा स्तर कैसे रहते हैं?",
+      "options": [
+        {"text_en": "Variable, burst and crash pattern", "text_hi": "अनिश्चित, कभी ज्यादा कभी बिल्कुल नहीं", "dosha": "vata", "score": 3},
+        {"text_en": "Intense and sustained until evening", "text_hi": "तेज और शाम तक निरंतर", "dosha": "pitta", "score": 3},
+        {"text_en": "Slow to start but steady and enduring", "text_hi": "धीमी शुरुआत लेकिन स्थिर और टिकाऊ", "dosha": "kapha", "score": 3}
+      ]
+    },
+    {
+      "id": 11,
+      "category": "Physical",
+      "question_en": "How do you respond to cold weather?",
+      "question_hi": "आप ठंडे मौसम में कैसा महसूस करते हैं?",
+      "options": [
+        {"text_en": "Dislike cold, prefer warmth, cold hands/feet", "text_hi": "ठंड पसंद नहीं, गर्मी पसंद, हाथ-पैर ठंडे", "dosha": "vata", "score": 3},
+        {"text_en": "Like coolness, dislike heat, intolerant to sun", "text_hi": "ठंडक पसंद, गर्मी पसंद नहीं, धूप से परेशानी", "dosha": "pitta", "score": 3},
+        {"text_en": "Dislike both cold and damp weather", "text_hi": "ठंड और नमी दोनों पसंद नहीं", "dosha": "kapha", "score": 3}
+      ]
+    },
+    {
+      "id": 12,
+      "category": "Digestion",
+      "question_en": "What foods do you crave?",
+      "question_hi": "आप किस तरह का खाना खाने की इच्छा करते हैं?",
+      "options": [
+        {"text_en": "Warm, oily, sweet, salty, heavy foods", "text_hi": "गर्म, तैलीय, मीठा, नमकीन, भारी खाना", "dosha": "vata", "score": 3},
+        {"text_en": "Cool, sweet, bitter, astringent foods", "text_hi": "ठंडा, मीठा, कड़वा, कसैला खाना", "dosha": "pitta", "score": 3},
+        {"text_en": "Light, dry, spicy, bitter foods (but crave sweets)", "text_hi": "हल्का, सूखा, मसालेदार (लेकिन मीठे की चाह)", "dosha": "kapha", "score": 3}
+      ]
+    },
+    {
+      "id": 13,
+      "category": "Physical",
+      "question_en": "How do you walk and move?",
+      "question_hi": "आप कैसे चलते और हिलते-डुलते हैं?",
+      "options": [
+        {"text_en": "Quick, light, erratic movements", "text_hi": "तेज, हल्का, अनिश्चित गतिविधियाँ", "dosha": "vata", "score": 3},
+        {"text_en": "Purposeful, direct, medium pace", "text_hi": "उद्देश्यपूर्ण, सीधा, मध्यम गति", "dosha": "pitta", "score": 3},
+        {"text_en": "Slow, steady, graceful gait", "text_hi": "धीमी, स्थिर, सुडौल चाल", "dosha": "kapha", "score": 3}
+      ]
+    },
+    {
+      "id": 14,
+      "category": "Mental",
+      "question_en": "Your approach to decision-making:",
+      "question_hi": "आप निर्णय कैसे लेते हैं?",
+      "options": [
+        {"text_en": "Indecisive, change mind often, anxious", "text_hi": "अनिर्णायक, बार-बार मन बदलना, चिंतित", "dosha": "vata", "score": 3},
+        {"text_en": "Quick, decisive, confident", "text_hi": "त्वरित, निर्णायक, आत्मविश्वासी", "dosha": "pitta", "score": 3},
+        {"text_en": "Slow, methodical, need time to decide", "text_hi": "धीमा, व्यवस्थित, निर्णय लेने में समय लगता है", "dosha": "kapha", "score": 3}
+      ]
+    },
+    {
+      "id": 15,
+      "category": "Physical",
+      "question_en": "Describe your joints:",
+      "question_hi": "अपने जोड़ों का वर्णन करें:",
+      "options": [
+        {"text_en": "Cracking, prominent, tendency to arthritis", "text_hi": "कड़कड़ाना, उभरे हुए, गठिया की प्रवृत्ति", "dosha": "vata", "score": 3},
+        {"text_en": "Loose, flexible, moderate", "text_hi": "ढीले, लचीले, सामान्य", "dosha": "pitta", "score": 3},
+        {"text_en": "Large, well-lubricated, strong", "text_hi": "बड़े, अच्छी तरह चिकनाई युक्त, मजबूत", "dosha": "kapha", "score": 3}
+      ]
+    },
+    {
+      "id": 16,
+      "category": "Mental",
+      "question_en": "How is your emotional nature?",
+      "question_hi": "आपका भावनात्मक स्वभाव कैसा है?",
+      "options": [
+        {"text_en": "Fearful, anxious, insecure, unpredictable", "text_hi": "डरपोक, चिंतित, असुरक्षित, अनिश्चित", "dosha": "vata", "score": 3},
+        {"text_en": "Passionate, ambitious, jealous, judgmental", "text_hi": "जोशीला, महत्वाकांक्षी, ईर्ष्यालु", "dosha": "pitta", "score": 3},
+        {"text_en": "Calm, loving, possessive, slow to anger", "text_hi": "शांत, प्रेमपूर्ण, अधिकारवादी, धीरे गुस्सा", "dosha": "kapha", "score": 3}
+      ]
+    },
+    {
+      "id": 17,
+      "category": "Physical",
+      "question_en": "How do you handle physical exercise?",
+      "question_hi": "आप शारीरिक व्यायाम कैसे करते हैं?",
+      "options": [
+        {"text_en": "Love activity but tire quickly", "text_hi": "गतिविधि पसंद लेकिन जल्दी थकान", "dosha": "vata", "score": 3},
+        {"text_en": "Competitive, moderate endurance, like challenges", "text_hi": "प्रतिस्पर्धी, मध्यम सहनशक्ति, चुनौतियाँ पसंद", "dosha": "pitta", "score": 3},
+        {"text_en": "Slow to start but excellent stamina", "text_hi": "शुरुआत धीमी लेकिन उत्कृष्ट सहनशक्ति", "dosha": "kapha", "score": 3}
+      ]
+    },
+    {
+      "id": 18,
+      "category": "Physical",
+      "question_en": "Your voice quality is:",
+      "question_hi": "आपकी आवाज की गुणवत्ता कैसी है?",
+      "options": [
+        {"text_en": "Low, weak, hoarse, rough", "text_hi": "कम, कमजोर, खुरदरी", "dosha": "vata", "score": 3},
+        {"text_en": "Sharp, clear, authoritative", "text_hi": "तीक्ष्ण, स्पष्ट, प्रभावशाली", "dosha": "pitta", "score": 3},
+        {"text_en": "Deep, resonant, melodious", "text_hi": "गहरी, गूंजदार, मधुर", "dosha": "kapha", "score": 3}
+      ]
+    },
+    {
+      "id": 19,
+      "category": "Digestion",
+      "question_en": "How much water do you drink?",
+      "question_hi": "आप कितना पानी पीते हैं?",
+      "options": [
+        {"text_en": "Variable, forget to drink, sometimes excessive", "text_hi": "अनिश्चित, पीना भूल जाते हैं", "dosha": "vata", "score": 3},
+        {"text_en": "Always thirsty, drink a lot", "text_hi": "हमेशा प्यास, बहुत पीते हैं", "dosha": "pitta", "score": 3},
+        {"text_en": "Rarely thirsty, drink little", "text_hi": "शायद ही कभी प्यास, कम पीते हैं", "dosha": "kapha", "score": 3}
+      ]
+    },
+    {
+      "id": 20,
+      "category": "General",
+      "question_en": "In general, you are more prone to:",
+      "question_hi": "सामान्यतः आपको किसकी अधिक प्रवृत्ति है?",
+      "options": [
+        {"text_en": "Constipation, gas, anxiety, dry conditions", "text_hi": "कब्ज, गैस, चिंता, सूखापन", "dosha": "vata", "score": 3},
+        {"text_en": "Inflammation, rashes, acidity, anger", "text_hi": "सूजन, दाने, एसिडिटी, गुस्सा", "dosha": "pitta", "score": 3},
+        {"text_en": "Weight gain, mucus, lethargy, depression", "text_hi": "वजन बढ़ना, बलगम, सुस्ती, अवसाद", "dosha": "kapha", "score": 3}
+      ]
+    }
+  ]
+}

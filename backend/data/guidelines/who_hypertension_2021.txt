@@ -1,0 +1,88 @@
+WHO Guideline for the Pharmacological Treatment of Hypertension in Adults (2021)
+Source: World Health Organization, Geneva
+Official document: https://www.ncbi.nlm.nih.gov/books/NBK573631/ (also published as
+https://www.who.int/publications/i/item/9789240033986)
+License: CC BY-NC-SA 3.0 IGO (https://creativecommons.org/licenses/by-nc-sa/3.0/igo)
+ISBN: 978-92-4-003398-6
+
+NOTE ON THIS DOCUMENT: this is an original summary composed after reviewing the
+official WHO guideline (Chapter 3, Recommendations), condensing its 8 formal
+recommendations for retrieval purposes. It is not a verbatim reproduction. For full
+evidence tables, GRADE certainty ratings, and implementation annexes, consult the
+official document at the URL above.
+
+== 1. WHEN TO START PHARMACOLOGICAL TREATMENT ==
+
+WHO strongly recommends starting antihypertensive drug treatment for a confirmed
+diagnosis of hypertension with systolic BP >=140 mmHg or diastolic BP >=90 mmHg
+(moderate-to-high certainty evidence). For people with existing cardiovascular
+disease, treatment should start at a lower threshold — systolic BP 130-139 mmHg
+(strong recommendation). The same lower threshold is suggested for people without
+known CVD but with high cardiovascular risk, diabetes mellitus, or chronic kidney
+disease. Treatment should begin within 4 weeks of diagnosis; if BP is very high
+(systolic >=160 or diastolic >=100 mmHg) or there is evidence of end-organ damage,
+treatment should start without delay.
+
+== 2. LABORATORY TESTING ==
+
+WHO suggests obtaining baseline tests (serum electrolytes and creatinine, lipid
+panel, HbA1c or fasting glucose, urine dipstick, ECG) to screen for comorbidities and
+secondary hypertension — but only when testing would not delay or impede starting
+treatment. In low-resource settings where testing isn't readily available, treatment
+should not be delayed; testing can follow.
+
+== 3. CARDIOVASCULAR RISK ASSESSMENT ==
+
+Most patients with systolic >=140 or diastolic >=90 mmHg are already high-risk and
+don't need formal CVD risk assessment before starting treatment. Risk assessment
+matters most for the borderline 130-139 mmHg systolic group, to decide whether
+earlier treatment is warranted, and should be done at or after treatment initiation
+rather than as a gate that delays care.
+
+== 4. FIRST-LINE DRUG CLASSES ==
+
+WHO recommends starting with a drug from any of three classes (strong
+recommendation, high-certainty evidence): thiazide/thiazide-like diuretics,
+ACE inhibitors or ARBs (angiotensin-receptor blockers), or long-acting
+dihydropyridine calcium channel blockers. Long-acting formulations are preferred.
+Situational preferences: diuretics or CCBs for patients over 65 or of African descent;
+beta-blockers for ischaemic heart disease; ACE inhibitors/ARBs for severe
+proteinuria, diabetes mellitus, heart failure, or kidney disease.
+
+== 5. COMBINATION THERAPY ==
+
+WHO suggests starting combination therapy — preferably a single-pill combination
+to improve adherence — chosen from the same three classes (diuretic, ACE
+inhibitor/ARB, long-acting CCB), rather than titrating a single drug first. This is
+especially valuable when baseline BP is 20/10 mmHg or more above target.
+Single-pill combinations measurably improve medication adherence and persistence
+compared to the same drugs taken as separate pills.
+
+== 6. TARGET BLOOD PRESSURE ==
+
+General target for patients with hypertension and no comorbidities: <140/90 mmHg
+(strong recommendation). For patients with known cardiovascular disease: a lower
+systolic target of <130 mmHg (strong recommendation). For high-risk patients without
+known CVD but with high CVD risk, diabetes, or chronic kidney disease: a systolic
+target of <130 mmHg is suggested (conditional recommendation) — the evidence for
+this group is less certain than for those with established CVD.
+
+== 7. FOLLOW-UP FREQUENCY ==
+
+Monthly follow-up is suggested after starting or changing antihypertensive
+medication, until the patient reaches target BP. Once BP is controlled, follow-up
+every 3-6 months is suggested. Evidence indicates that waiting longer than roughly
+6 weeks to start treatment, or longer than roughly 3 months to reassess after
+starting, is associated with a meaningfully higher rate of major adverse
+cardiovascular events.
+
+== 8. NONPHYSICIAN-DELIVERED CARE ==
+
+WHO suggests that pharmacists and nurses can prescribe and manage
+antihypertensive treatment, provided they have proper training, prescribing
+authority under local regulation, defined management protocols, and physician
+oversight. Community health workers can assist with education, medication
+delivery, and BP monitoring as part of a collaborative care model. Evidence shows
+nonphysician-managed care achieves BP control at least as well as physician-only
+care, with meaningfully better control rates in several studies (pharmacist-managed
+programs in particular).

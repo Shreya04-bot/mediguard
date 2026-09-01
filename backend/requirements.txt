@@ -1,0 +1,82 @@
+# MediGuard AI — Backend Requirements (Refactored for Real Data)
+# ================================================================
+# Core Framework
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
+python-multipart==0.0.9
+pydantic==2.7.1
+pydantic-settings==2.2.1
+
+# ML & Data Science
+scikit-learn==1.4.2
+xgboost==2.0.3
+shap==0.45.0
+numpy==1.26.4
+pandas==2.2.2
+
+# LangChain / Agents
+# langchain-core bumped 0.2.1 -> 0.2.43: langchain-ollama==0.1.0 requires
+# langchain-core>=0.2.20, which conflicted with the old 0.2.1 pin. 0.2.43 is the
+# version pip's resolver settles on as mutually compatible with langchain==0.2.1,
+# langchain-community==0.2.1, langchain-groq==0.1.4, langchain-google-genai==1.0.4,
+# langgraph==0.1.1, and langchain-ollama==0.1.0 simultaneously (verified via
+# `pip install -r requirements.txt`, full resolution, no conflicts).
+langchain==0.2.1
+langchain-core==0.2.43
+langchain-community==0.2.1
+langchain-groq==0.1.4
+langchain-google-genai==1.0.4
+langgraph==0.1.1
+langchain-ollama==0.1.0
+langsmith>=0.1.63,<0.2.0
+
+# Vector DB / RAG
+chromadb==0.5.0
+posthog<3.1,>=2.4  # pinned: chromadb 0.5.0's telemetry calls capture() with an arg signature that newer posthog majors (7.x, pip's default resolution) broke
+sentence-transformers==2.7.0
+
+# MLflow
+mlflow==2.13.0
+
+# OCR
+pytesseract==0.3.10
+Pillow==10.3.0
+
+# PDF Generation / parsing
+reportlab==4.1.0
+pypdf==4.2.0
+
+# HTTP / Networking
+requests==2.32.2
+
+# Audio / Voice  (SpeechRecognition + pyttsx3 are what voice.py actually imports)
+SpeechRecognition==3.10.4
+pyttsx3==2.90
+
+# Utilities
+# python-dotenv: not imported directly anywhere in backend/, but it IS load-bearing:
+# utils/config.py's Settings.Config.env_file = ".env" is read by pydantic-settings via
+# python-dotenv under the hood, so backend/.env stops loading silently if this is removed.
+python-dotenv==1.0.1
+
+# NOTE ON REMOVED PACKAGES (audit finding — see summary):
+# aiohttp, tenacity, cachetools, httpx, and a pinned top-level urllib3 were listed
+# for a "real data enrichment" PubMed/OpenFDA feature (see requirements.txt history)
+# that was never built — no backend/ module imports them, the only trace is an
+# empty _deprecated/real_data_loader.py stub and one leftover PubMed sample JSON
+# in data/raw/. Removed as genuinely out of scope rather than wired up, since no
+# route, schema, or frontend page references PubMed/OpenFDA data. urllib3 and httpx
+# remain installed transitively (via requests/groq) so nothing else breaks.
+
+# Testing (backend/tests/*.py — pytest + FastAPI's TestClient, which needs httpx)
+# Previously missing from this file despite a real, imported-by-name test suite;
+# a fresh `pip install -r requirements.txt` could not actually run the tests.
+pytest==8.2.0
+httpx==0.27.0
+
+# Authentication
+SQLAlchemy==2.0.30
+passlib[bcrypt]==1.7.4
+bcrypt==4.0.1          # pinned: passlib 1.7.4 breaks on bcrypt>=4.1
+python-jose[cryptography]==3.3.0
+email-validator==2.1.1 # required by pydantic EmailStr

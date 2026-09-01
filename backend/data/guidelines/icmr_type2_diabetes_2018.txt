@@ -1,0 +1,113 @@
+ICMR Guidelines for Management of Type 2 Diabetes (2018)
+Source: Indian Council of Medical Research (ICMR), Government of India
+Official document: https://www.icmr.gov.in/icmrobject/custom_data/pdf/resource-guidelines/ICMR_GuidelinesType2diabetes2018_0.pdf
+Prepared by an ICMR expert workshop (Chennai, 10 January 2018), convened by
+Dr. Nikhil Tandon (AIIMS New Delhi) and Dr. V. Mohan (Madras Diabetes Research
+Foundation).
+
+NOTE ON THIS DOCUMENT: this is an original summary composed by reviewing the
+official ICMR guideline document, condensing and reorganizing its clinical content
+for retrieval purposes. It is not a verbatim reproduction of the source PDF. For the
+complete, authoritative guideline text — including full drug-dosage tables, detailed
+algorithms, and the expert panel's full recommendations — consult the official PDF
+at the URL above.
+
+== SCREENING AND DIAGNOSIS ==
+
+Screening: All individuals aged 30 years and above should be screened for type 2
+diabetes. Screening should start earlier for people with any of: family history of
+diabetes; overweight/obesity (BMI >=23 kg/m2) or increased waist circumference
+(>90 cm men, >80 cm women); history of hypertension (>=130/80 mmHg) or on
+antihypertensive treatment; dyslipidaemia; sedentary lifestyle; prior gestational
+diabetes or a baby born >3.5 kg; history of cardiovascular disease; or PCOS with
+acanthosis nigricans. If glucose tolerance is normal, retest in 3 years; retest annually
+if prediabetic.
+
+Diagnostic criteria (any one, confirmed by a repeat test): fasting plasma glucose
+>=126 mg/dL; 2-hour post-75g-OGTT glucose >=200 mg/dL; HbA1c >=6.5%; or classic
+symptoms plus a random plasma glucose >=200 mg/dL. Prediabetes is defined as
+impaired fasting glucose (100-125 mg/dL per ADA, or 110-125 per WHO) or impaired
+glucose tolerance (140-199 mg/dL 2-hour OGTT), or HbA1c 5.7-6.4%.
+
+== TARGETS FOR METABOLIC CONTROL ==
+
+Ideal targets: fasting plasma glucose 80-110 mg/dL; 2-hour postprandial glucose
+120-140 mg/dL; blood pressure <130/80 mmHg; BMI 20-23 kg/m2; HbA1c <7%.
+Lipid targets: total cholesterol <200 mg/dL; HDL >40 mg/dL (men) / >50 mg/dL
+(women); LDL <100 mg/dL (or <70 mg/dL for those at high cardiovascular risk —
+established CVD, smoking, obesity, hypertension, family history of premature CVD);
+non-HDL cholesterol <130 mg/dL; triglycerides <150 mg/dL. Targets should be
+individualized — tighter in younger patients without complications, relaxed with
+advancing age or comorbidity.
+
+== NON-PHARMACOLOGICAL MANAGEMENT ==
+
+Medical nutrition therapy is individualized around family eating patterns: roughly
+55-60% of energy from complex, high-fibre carbohydrates; 12-15% from protein;
+20-30% from fat (saturated fat <=10% of energy, trans fat <1%, preference for
+MUFA-rich oils like mustard/rice bran/groundnut). Added salt <5 g/day generally,
+<3 g/day if hypertensive. Alcohol best avoided. Recommended physical activity: about
+150 minutes/week of aerobic activity plus resistance training at least twice weekly
+and flexibility work. Tobacco use is to be stopped completely. Yoga is noted as a
+traditional adjunct with emerging evidence for benefit on glycaemic control and
+stress, though more high-quality studies are called for.
+
+== PHARMACOLOGICAL MANAGEMENT ==
+
+Metformin is first-line therapy for most patients (start 500 mg after meals, titrate by
+500 mg every 2 weeks toward a maximum of 2500 mg/day), contraindicated in renal
+insufficiency (dose-adjust below eGFR 60, halve below 45, stop below 30 mL/min),
+hepatic/respiratory insufficiency, recent MI, heart failure, or ketoacidosis. If HbA1c
+remains above target on metformin monotherapy, second-line options include
+sulfonylureas (effective, inexpensive, but hypoglycaemia/weight-gain risk),
+DPP-4 inhibitors (low hypoglycaemia risk, weight-neutral, costlier), SGLT2 inhibitors
+(weight/BP-lowering, genitourinary infection risk), thiazolidinediones, alpha-
+glucosidase inhibitors, glinides, or GLP-1 receptor agonists. Insulin should be started
+without delay whenever indicated — significant symptomatic hyperglycaemia, fasting
+glucose >270 mg/dL or HbA1c >9% at diagnosis, ketosis, severe infection, or failure of
+maximal oral combination therapy — rather than treated as a last resort.
+
+== COMPLICATIONS ==
+
+Diabetic retinopathy: dilated retinal exam at diagnosis (type 2) or within 5 years
+(type 1), then annually; ~90% of diabetes-related blindness is preventable with early
+detection and treatment. Diabetic nephropathy: annual urine albumin-creatinine ratio
+and serum creatinine/eGFR from diagnosis; ACE inhibitors or ARBs (never combined)
+are first-line for hypertension with nephropathy; refer to nephrology for resistant
+hypertension, serum potassium >5.5 meq/L, nephrotic-range proteinuria, or eGFR
+<60 mL/min. Diabetic neuropathy and diabetic foot: annual comprehensive foot exam
+(10g monofilament, 128Hz tuning fork, vascular pulses), with risk stratified into
+low/moderate/high/active-disease categories that set follow-up frequency from
+annual up to weekly. Foot ulceration should be referred to a multidisciplinary foot
+service within 24 hours.
+
+== COMORBID CONDITIONS ==
+
+Hypertension: blood pressure should be checked at every visit; >140/90 mmHg is
+the threshold to initiate treatment (recheck after 1 week to confirm). First-line
+monotherapy is an ACE inhibitor or ARB (never combined), calcium channel blocker,
+or (third-line) a selective beta blocker/diuretic. If BP remains >140/90 after a month
+of monotherapy, add a second agent from a different class; if still uncontrolled on two
+optimally-dosed agents, refer to a specialist. Severe hypertension at presentation
+(>180/110 mmHg, or evidence of end-organ damage) warrants starting two drugs
+immediately and urgent specialist referral. People with both diabetes and
+hypertension should be managed more aggressively than hypertension alone, given
+the compounded stroke/MI/nephropathy risk.
+
+Dyslipidaemia: screen all patients with diabetes; treat aggressively per the lipid
+targets above. Obesity: lifestyle modification is the mainstay; bariatric surgery may
+be considered in morbid obesity. Tuberculosis: India has a high burden of TB-diabetes
+comorbidity (~25% of TB patients found to have diabetes); a chest X-ray is advised at
+initial evaluation where clinically indicated, and insulin is preferred over oral agents
+when diabetes is uncontrolled in the presence of active TB.
+
+== DIABETES AND PREGNANCY ==
+
+Universal screening of all pregnant women for gestational diabetes is preferred over
+selective (risk-factor-based) screening. A 75g OGTT is done at 24-28 weeks using
+IADPSG cut-offs (fasting >=92, 1-hour >=180, 2-hour >=153 mg/dL — any one value
+diagnostic), or the non-fasting DIPSI single-value test (2-hour >=140 mg/dL) where
+fasting testing isn't practical. Lifestyle/nutrition therapy is first-line; most patients
+progressing beyond that need insulin (oral agents other than metformin are generally
+avoided in pregnancy). All women with gestational diabetes need a postpartum OGTT
+at 6-8 weeks, since 50-70% go on to develop diabetes within 5-10 years.

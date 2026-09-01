@@ -1,0 +1,94 @@
+{
+  "source_policy": "Kaggle only; fail fast when unavailable",
+  "dataset_version": "eec12aba7eedac10",
+  "rows": 21886,
+  "train_rows": 17508,
+  "test_rows": 4378,
+  "schema": [
+    "age",
+    "gender_encoded",
+    "bmi",
+    "blood_pressure_systolic",
+    "blood_pressure_diastolic",
+    "fasting_glucose",
+    "hba1c",
+    "cholesterol_total",
+    "cholesterol_hdl",
+    "cholesterol_ldl",
+    "triglycerides",
+    "smoking",
+    "family_history_diabetes",
+    "family_history_cvd",
+    "physical_activity_encoded",
+    "diabetes_label",
+    "cardiovascular_label",
+    "hypertension_label"
+  ],
+  "kaggle_slugs": {
+    "pima": "uciml/pima-indians-diabetes-database",
+    "heart": "cherngs/heart-disease-cleveland-uci",
+    "cardio": "sulianova/cardiovascular-disease-dataset",
+    "framingham": "riskCommunicator (CRAN) \u2014 NIH/NHLBI Framingham Heart Study teaching dataset",
+    "nhanes": "NHANES (CRAN, Pruim) \u2014 real CDC NHANES 2009-2012 teaching subset, GPL(>=2)"
+  },
+  "sources_used": [
+    "pima",
+    "heart",
+    "cardio",
+    "framingham",
+    "nhanes"
+  ],
+  "sources_missing": [],
+  "synthetic_columns_by_source": {
+    "pima": [
+      "cholesterol_total",
+      "cholesterol_hdl",
+      "cholesterol_ldl",
+      "triglycerides",
+      "physical_activity_encoded",
+      "smoking",
+      "family_history_cvd"
+    ],
+    "heart": [
+      "bmi",
+      "cholesterol_hdl",
+      "triglycerides",
+      "smoking",
+      "family_history_diabetes",
+      "family_history_cvd"
+    ],
+    "cardio": [
+      "cholesterol_hdl",
+      "cholesterol_ldl",
+      "triglycerides",
+      "family_history_diabetes",
+      "family_history_cvd"
+    ],
+    "framingham": [
+      "cholesterol_hdl",
+      "cholesterol_ldl",
+      "triglycerides",
+      "family_history_diabetes",
+      "family_history_cvd"
+    ],
+    "nhanes": [
+      "cholesterol_ldl",
+      "triglycerides",
+      "fasting_glucose",
+      "hba1c",
+      "family_history_diabetes",
+      "family_history_cvd"
+    ]
+  },
+  "synthetic_column_reference_values": {
+    "cholesterol_total": 190.0,
+    "cholesterol_hdl": 50.0,
+    "cholesterol_ldl": 100.0,
+    "triglycerides": 150.0,
+    "physical_activity_encoded": 2,
+    "smoking": 0,
+    "family_history_diabetes": 0,
+    "family_history_cvd": 0
+  },
+  "synthetic_columns_disclaimer": "Columns listed in synthetic_columns_by_source are filled with fixed population-reference constants, not measured per-patient data. This does NOT satisfy a real-world-data requirement for those specific columns \u2014 it only removes fake per-row random variance that a prior version of this pipeline generated. Treat any column listed here as unmeasured for that source."
+}

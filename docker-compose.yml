@@ -1,0 +1,43 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: mediguard_backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    volumes:
+      - backend_data:/app/backend/data
+      - model_store:/app/models
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        # Vite env vars are compile-time — this must point at wherever the
+        # backend is reachable *from the browser*, not from inside the
+        # frontend container. The nginx.conf proxy means the relative path
+        # below works for the default docker-compose setup (frontend served
+        # on :80, browser hits /api/... which nginx proxies to the backend
+        # container); override for a split-domain deployment.
+        VITE_API_BASE_URL: /api/v1
+    container_name: mediguard_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  backend_data:
+  model_store:

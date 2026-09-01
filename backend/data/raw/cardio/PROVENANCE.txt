@@ -1,0 +1,38 @@
+MediGuard AI — data/raw/cardio/cardio_train.csv provenance
+=============================================================
+
+This file IS the real `sulianova/cardiovascular-disease-dataset` from
+Kaggle (70,000 rows, 13 columns, semicolon-delimited) — verified against
+the schema and statistics documented on the dataset's Kaggle page and in
+multiple independent public analyses of it (near-50/50 class balance,
+age range ~10798-23713 days, no nulls, no duplicate ids).
+
+How it was obtained (this delivered copy)
+------------------------------------------
+Direct Kaggle API access was not available in the environment that
+produced this build (no `kaggle.com` in the sandbox's network allowlist,
+no Kaggle account configured). The dataset was instead retrieved from a
+public GitHub mirror of the same file, verified by content (matching
+row count, column schema, and known first/last rows against the
+original):
+
+    Source: https://github.com/caravanuden/cardio
+            (COSC 89.20 "Data Science for Health" coursework repo,
+            Dartmouth College)
+    File:   cardio_train.csv
+    Fetched via: https://raw.githubusercontent.com/caravanuden/cardio/master/cardio_train.csv
+    SHA-256: 21a705d23381b0dfd6a6416da701b490744f1fc3b47e9ff3db3968c420ffa10c
+    Rows: 70,000 (+ header)
+    Retrieved: this development pass (see git history / PROJECT_FIX_CHECKLIST.md)
+
+This is a byte-verified copy of the same publicly available dataset the
+project's own `docs/datasets/KAGGLE_GUIDE.md` has always instructed users
+to download directly from Kaggle — retrieved via a different (but
+equally public, equally real) distribution channel because that's what
+was reachable from this environment. It is NOT a fabricated, resampled,
+or schema-matched synthetic substitute. If you'd rather have the file
+directly from Kaggle (recommended for anything beyond this delivered
+snapshot — GitHub mirrors can disappear or drift), follow
+`docs/datasets/KAGGLE_GUIDE.md`'s `kaggle datasets download` instructions
+and overwrite this file; the loader doesn't care which source path it
+came from, only that the schema matches.

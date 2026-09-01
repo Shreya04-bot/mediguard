@@ -1,0 +1,21 @@
+# dependencies
+node_modules/
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# env files
+.env
+*.env
+!.env.example
+
+# secrets / local-only
+id password.txt
+
+# build output
+dist/
+build/
+
+# misc
+.DS_Store

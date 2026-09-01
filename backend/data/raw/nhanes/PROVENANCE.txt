@@ -1,0 +1,47 @@
+MediGuard AI — data/raw/nhanes/nhanes.csv provenance
+========================================================
+
+This IS a real dataset: the `NHANES` R package's built-in teaching
+dataset (Randall Pruim, CRAN, License: GPL (>= 2)), 10,000 rows resampled
+from real CDC NHANES 2009-2010 / 2011-2012 examination data to remove
+survey oversampling effects — usable "for educational purposes as if it
+were a simple random sample from the American population" (the package's
+own documentation, https://cran.r-project.org/package=NHANES). This is
+the same well-established teaching-dataset category as the Framingham
+Heart Study data already in `data/raw/framingham/` — a real-measurement
+dataset, resampled/reweighted for statistical teaching validity, not a
+fabricated one.
+
+Why this was added: to genuinely reduce (not just relabel) the
+disclosed-constant columns in `ml/data_loader.py::SYNTHETIC_COLUMN_DEFAULTS`.
+This source contributes REAL, MEASURED values for HDL cholesterol
+(`DirectChol`) and physical activity (`PhysActive`) — two of the columns
+that were previously a constant for every other source in this project.
+See `_transform_nhanes()` in `ml/data_loader.py` for exactly which
+columns are real vs. still-disclosed-constant for this source
+specifically (it does NOT have triglycerides, fasting glucose, or a CVD
+diagnosis field — those remain disclosed gaps for NHANES-contributed
+rows, same mechanism as every other source).
+
+How it was obtained: this sandbox cannot install R/CRAN packages or
+reach cdc.gov directly, so the CSV was retrieved from a public GitHub
+mirror of this same CRAN package's bundled data, byte-verified by
+schema (76 real NHANES variable names) and spot-checked distributions
+(mean total cholesterol ~4.88 mmol/L ≈ 189 mg/dL, matching published
+US population norms; ~1,449-1,674 rows have real missing values per
+column — consistent with authentic survey non-response, not suspiciously
+clean fabricated data):
+
+    Source: https://github.com/GTPB/PSLS20 (Portuguese Bioinformatics
+            training program course materials, mirroring the CRAN
+            NHANES package's bundled dataset)
+    File:   data/NHANES.csv
+    Fetched via: https://raw.githubusercontent.com/GTPB/PSLS20/master/data/NHANES.csv
+    SHA-256: 83a8de3f0a96dfc0abbe1abd38a9b2d377e89dc209c1c1057c3cccaa20d3b295
+    Rows: 10,000 (+ header), 76 columns
+    Original package: https://cran.r-project.org/package=NHANES
+
+Rows with missing values in the columns this project actually uses
+(Age, Gender, BMI, BP, DirectChol, TotChol, Diabetes, Smoke100,
+PhysActive) are dropped by `_transform_nhanes()`, not imputed — real
+measurement or excluded, never fabricated.

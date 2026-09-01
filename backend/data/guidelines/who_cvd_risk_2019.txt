@@ -1,0 +1,83 @@
+WHO Cardiovascular Disease Risk Assessment and Management — Summary
+Sources:
+  1. Kaptoge S, Pennells L, De Bacquer D, et al. (WHO CVD Risk Chart Working
+     Group). "World Health Organization cardiovascular disease risk charts:
+     revised models to estimate risk in 21 global regions." Lancet Global
+     Health. 2019;7(10):e1332-e1345. Open access, CC BY 4.0.
+     https://doi.org/10.1016/S2214-109X(19)30318-3
+  2. World Health Organization. "HEARTS: technical package for
+     cardiovascular disease management in primary health care: risk-based
+     CVD management." Geneva: WHO; 2020. CC BY-NC-SA 3.0 IGO.
+     https://iris.who.int/handle/10665/333221
+
+NOTE ON THIS DOCUMENT: this is a narrower, more limited summary than the
+ICMR diabetes and WHO hypertension documents in this corpus — it is
+composed from the published abstract, methods, and findings of the 2019
+risk-chart paper plus the publicly described scope of the HEARTS package,
+not from the full text of either document (which could not be retrieved
+in this session). It covers the risk-stratification *approach*, not a
+complete clinical management protocol. For full clinical detail, consult
+the sources above directly.
+
+== WHY RISK-BASED, NOT SINGLE-FACTOR, ASSESSMENT ==
+
+Both sources describe a shift away from treating individual risk factors
+(blood pressure, cholesterol) in isolation, toward estimating a person's
+total absolute 10-year cardiovascular disease risk from their combined
+risk-factor profile, then using that total-risk estimate to guide
+treatment intensity. The HEARTS package frames this explicitly: CVD
+develops from the combination of tobacco use, unhealthy diet, physical
+inactivity, obesity, elevated blood pressure, dyslipidaemia, and elevated
+blood glucose acting together — total risk depends on the whole profile,
+not any single factor crossing a threshold in isolation.
+
+== THE WHO CVD RISK CHARTS (2019 REVISION) ==
+
+The revised WHO risk prediction models estimate a person's 10-year risk
+of a fatal or non-fatal cardiovascular event (myocardial infarction or
+stroke) from five inputs: age, sex, smoking status, systolic blood
+pressure, and either total cholesterol (a "laboratory-based" chart) or
+BMI as a substitute where cholesterol testing isn't available (a
+"non-laboratory-based" chart) — plus history of diabetes. This
+lab-free option is deliberately included so risk estimation doesn't have
+to wait on lab infrastructure that may not be available in every
+primary-care setting.
+
+The models were derived from 376,177 individuals across 85 cohorts
+(19,333 incident cardiovascular events over 10 years of follow-up) and
+externally validated in a further 19 cohorts (1,096,061 individuals,
+25,950 events), with good discrimination (Harrell's C-index 0.685-0.833
+across validation cohorts). Because absolute risk for an identical risk
+factor profile varies substantially by region — the paper's own
+worked example: a 60-year-old male smoker, non-diabetic, systolic BP
+140 mmHg, total cholesterol 5 mmol/L, has an estimated 10-year risk
+ranging from 11% (Andean Latin America) to 30% (Central Asia) — the
+charts are calibrated separately for 21 global regions rather than using
+one universal chart.
+
+== HOW RISK CATEGORIES ARE USED CLINICALLY ==
+
+The general pattern across WHO/ISH-style risk charts (this project's
+region-specific banding may vary; consult the official chart for the
+applicable region) is to bucket predicted 10-year risk into bands — low,
+moderate, high, and very high — with treatment intensity escalating by
+band: lifestyle counselling alone at the low end, and progressively
+stronger cases for statin and/or antihypertensive pharmacotherapy as
+predicted risk rises, independent of whether any single input (e.g. blood
+pressure) has individually crossed a diagnostic threshold. This is the
+key practical implication for a decision-support tool: two people with
+identical blood pressure can warrant different management if their
+overall risk profiles (age, smoking, cholesterol, diabetes status)
+differ.
+
+== INTEGRATION WITH COMORBIDITIES ==
+
+Both this corpus's ICMR diabetes document and WHO hypertension document
+describe risk-based escalation for their respective conditions
+(cardiovascular risk stratifying LDL targets in the diabetes guideline;
+elevated baseline CVD risk lowering the blood-pressure treatment
+threshold in the hypertension guideline). The risk-chart approach
+described here is the common thread connecting them: diabetes,
+hypertension, and dyslipidaemia are evaluated individually by their own
+guidelines, but a person's overall cardiovascular risk is what should
+ultimately guide how aggressively each is treated.
