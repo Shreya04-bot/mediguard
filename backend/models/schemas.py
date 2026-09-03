@@ -107,19 +107,6 @@ class CoordinatorResponse(BaseModel):
         "MediGuard AI provides decision support only. "
         "Always consult a qualified healthcare professional."
     )
-
-
-# ---------------------------------------------------------------------------
-# Report Upload
-# ---------------------------------------------------------------------------
-
-class ReportAnalysisResult(BaseModel):
-    report_type: str   # "pdf" | "image"
-    extracted_values: Dict[str, Any] = Field(default_factory=dict)
-    summary: str
-    flags: List[str] = Field(default_factory=list)
-
-
 # ---------------------------------------------------------------------------
 # Voice
 # ---------------------------------------------------------------------------

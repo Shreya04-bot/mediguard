@@ -2,7 +2,7 @@ import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { motion } from "framer-motion";
-import { Send, Bot, User, Sparkles } from "lucide-react";
+import { Activity, Send, Bot, User, Sparkles } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 
 import { useAuth } from "@/context/AuthContext";
 import { sendChatMessageApi } from "@/services/chatbotService";
+import { mapVernacularSymptomsApi } from "@/services/featuresService";
 
 interface Message {
   id: number;
@@ -50,6 +51,8 @@ export function SymptomChatbot({
 
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [mappedSymptoms, setMappedSymptoms] = useState<any>(null);
+  const [mappingLoading, setMappingLoading] = useState(false);
 
   const sendMessage = async (text?: string) => {
     const content = text ?? input.trim();
@@ -72,23 +75,39 @@ export function SymptomChatbot({
 
     setMessages((current) => [...current, userMsg]);
     setIsTyping(true);
+    setMappingLoading(true);
+    setMappedSymptoms(null);
 
     try {
-      const { reply } = await sendChatMessageApi(
-        content,
-        history,
-        user?.role ?? "patient"
-      );
-
-      setMessages((current) => [
-        ...current,
-        {
-          id: Date.now() + 1,
-          role: "assistant",
-          content: reply,
-          time: "now",
-        },
+      const [chatResult, mappingResult] = await Promise.allSettled([
+        sendChatMessageApi(
+          content,
+          history,
+          user?.role ?? "patient"
+        ),
+        mapVernacularSymptomsApi(content, true),
       ]);
+
+      if (mappingResult.status === "fulfilled") {
+        console.log("F3 SYMPTOM MAPPING RESPONSE:", mappingResult.value);
+        setMappedSymptoms(mappingResult.value);
+      }
+
+      if (chatResult.status === "fulfilled") {
+        const { reply } = chatResult.value;
+
+        setMessages((current) => [
+          ...current,
+          {
+            id: Date.now() + 1,
+            role: "assistant",
+            content: reply,
+            time: "now",
+          },
+        ]);
+      } else {
+        throw chatResult.reason;
+      }
     } catch (err) {
       setMessages((current) => [
         ...current,
@@ -103,6 +122,7 @@ export function SymptomChatbot({
         },
       ]);
     } finally {
+      setMappingLoading(false);
       setIsTyping(false);
     }
   };
@@ -144,7 +164,6 @@ export function SymptomChatbot({
         </div>
       )}
 
-      {/* Messages */}
       {/* Messages */}
       <ScrollArea className="flex-1 min-h-0 overflow-hidden">
         <div className="p-4">
@@ -322,6 +341,112 @@ export function SymptomChatbot({
                 </div>
               </motion.div>
             ))}
+
+            {mappingLoading && (
+              <motion.div
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="ml-11 rounded-2xl rounded-tl-none bg-primary/5 border border-primary/10 px-4 py-3"
+              >
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Activity className="size-4 text-primary animate-pulse" />
+                  <span>Understanding your message...</span>
+                </div>
+              </motion.div>
+            )}
+
+            {!mappingLoading &&
+              mappedSymptoms &&
+              mappedSymptoms.intent !== "medical_question" && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mx-auto w-full max-w-3xl rounded-2xl border border-border/60 bg-card p-4 shadow-sm sm:p-5"
+                >
+                  <div className="mb-4 flex items-start gap-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+                      <Activity className="h-5 w-5 text-primary" />
+                    </div>
+
+                    <div className="min-w-0">
+                      <h4 className="font-semibold text-foreground">
+                        Symptoms Identified
+                      </h4>
+                      <p className="text-sm text-muted-foreground">
+                        We translated your description into common clinical terms.
+                      </p>
+                    </div>
+                  </div>
+
+                  {Array.isArray(mappedSymptoms.mapped_symptoms) &&
+                    mappedSymptoms.mapped_symptoms.length > 0 && (
+                      <div className="space-y-3">
+                        {mappedSymptoms.mapped_symptoms.map(
+                          (symptom: any, index: number) => (
+                            <div
+                              key={`${symptom.clinical_term}-${index}`}
+                              className="rounded-xl border border-border/50 bg-muted/30 p-4"
+                            >
+                              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                <div>
+                                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                                    Your symptom
+                                  </p>
+                                  <p className="mt-1 text-sm text-foreground">
+                                    {symptom.original ?? mappedSymptoms.original_text}
+                                  </p>
+                                </div>
+
+                                <div className="hidden text-muted-foreground sm:block">
+                                  →
+                                </div>
+
+                                <div>
+                                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                                    Clinical term
+                                  </p>
+                                  <p className="mt-1 font-medium text-foreground">
+                                    {symptom.clinical_term}
+                                  </p>
+                                </div>
+
+                                {symptom.icd11_code && (
+                                  <div className="sm:text-right">
+                                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                                      ICD-11
+                                    </p>
+                                    <span className="mt-1 inline-flex rounded-md bg-primary/10 px-2 py-1 text-xs font-medium text-primary">
+                                      {symptom.icd11_code}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )
+                        )}
+                      </div>
+                    )}
+
+                  <div className="mt-4 flex flex-col gap-3 border-t border-border/50 pt-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-foreground">
+                        {mappedSymptoms.clinical_summary}
+                      </p>
+
+                      {mappedSymptoms.systems_affected?.length > 0 && (
+                        <p className="mt-1 text-xs text-muted-foreground">
+                          Affected system:{" "}
+                          {mappedSymptoms.systems_affected.join(", ")}
+                        </p>
+                      )}
+                    </div>
+
+                    <span className="inline-flex w-fit items-center rounded-full bg-muted px-3 py-1.5 text-xs font-medium text-muted-foreground">
+                      Clinical terminology
+                    </span>
+                  </div>
+                </motion.div>
+              )}
 
             {/* Typing Indicator */}
             {isTyping && (

@@ -247,10 +247,15 @@ const ayurvedaNav = [
     icon: Leaf,
   },
   {
-  title: "Ayurveda AI",
-  url: "/ayurveda/agent",
-  icon: Sparkles,
-}
+    title: "Ayurveda AI",
+    url: "/ayurveda/agent",
+    icon: Sparkles,
+  },
+ {
+    title: "Health Timeline",
+    url: "/ayurveda/timeline",
+    icon: GitBranch,
+  },
 ];
 
 

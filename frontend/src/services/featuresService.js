@@ -17,3 +17,19 @@ import api from "./api";
  * @returns {Promise<{ districts: Array<Object>, summary: Object }>}
  */
 export const fetchDistrictHeatmapApi = () => api.get("/features/heatmap");
+
+
+export const simulateTimelineApi = async (patientData, interventionKeys) => {
+  const response = await api.post("/features/timeline", {
+    patient_data: patientData,
+    intervention_keys: interventionKeys,
+  });
+  return response;
+};
+
+export const mapVernacularSymptomsApi = async (text, useLlmFallback = true) => {
+  return await api.post("/features/symptoms/map", {
+    text,
+    use_llm_fallback: useLlmFallback,
+  });
+};

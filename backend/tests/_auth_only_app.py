@@ -12,8 +12,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
-from api.routes import auth_routes, patient_routes, doctor_routes, admin_routes, health, notifications, ai_gateway, mlops, prediction, appointment_routes, agents
-
+from api.routes import auth_routes, patient_routes, doctor_routes, admin_routes, health, notifications, ai_gateway, mlops, prediction, appointment_routes
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -53,4 +52,3 @@ app.include_router(ai_gateway.router, prefix="/api/v1/ai", tags=["AI Gateway"])
 app.include_router(mlops.router, prefix="/api/v1/mlops", tags=["MLOps"])
 app.include_router(prediction.router, prefix="/api/v1/predict", tags=["Prediction"])
 app.include_router(appointment_routes.router, prefix="/api/v1/appointments", tags=["Appointments"])
-app.include_router(agents.router, prefix="/api/v1/agents", tags=["Agents"])

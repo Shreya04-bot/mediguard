@@ -36,8 +36,6 @@ if settings.langchain_tracing_v2 and settings.langchain_api_key:
 from api.routes import (
     health,
     prediction,
-    agents,
-    reports,
     voice,
     mlops,
     ayurveda,
@@ -125,8 +123,6 @@ app.include_router(doctor_routes.router,  prefix="/api/v1/doctor",   tags=["Doct
 app.include_router(admin_routes.router,   prefix="/api/v1/admin",    tags=["Admin"])
 app.include_router(health.router,         prefix="/api/v1/health",   tags=["Health"])
 app.include_router(prediction.router,     prefix="/api/v1/predict",  tags=["Prediction"])
-app.include_router(agents.router,         prefix="/api/v1/agents",   tags=["Agents"])
-app.include_router(reports.router,        prefix="/api/v1/reports",  tags=["Reports"])
 app.include_router(voice.router,          prefix="/api/v1/voice",    tags=["Voice"])
 app.include_router(mlops.router,          prefix="/api/v1/mlops",    tags=["MLOps"])
 app.include_router(ayurveda.router,       prefix="/api/v1/features", tags=["Features & Ayurveda"])
@@ -151,7 +147,6 @@ app.include_router(auth_routes.router,    prefix="/api/auth",     tags=["Auth (u
 app.include_router(patient_routes.router, prefix="/api/patient",  tags=["Patient (unversioned alias)"], include_in_schema=False)
 app.include_router(doctor_routes.router,  prefix="/api/doctor",   tags=["Doctor (unversioned alias)"], include_in_schema=False)
 app.include_router(admin_routes.router,   prefix="/api/admin",    tags=["Admin (unversioned alias)"], include_in_schema=False)
-app.include_router(reports.router,        prefix="/api/reports",  tags=["Reports (unversioned alias)"], include_in_schema=False)
 app.include_router(voice.router,          prefix="/api/voice",    tags=["Voice (unversioned alias)"], include_in_schema=False)
 app.include_router(notifications.router,  prefix="/api/notifications", tags=["Notifications (unversioned alias)"], include_in_schema=False)
 app.include_router(ai_gateway.router,     prefix="/api/ai",          tags=["AI Gateway (unversioned alias)"], include_in_schema=False)

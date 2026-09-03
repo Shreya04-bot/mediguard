@@ -34,11 +34,20 @@ async def simulate_timeline(req: TimelineRequest):
     try:
         from features.timeline_simulator import simulate_timeline
         from ml.model import get_model
-        result = simulate_timeline(req.patient_data, get_model().predict, req.intervention_keys)
+
+        model = get_model()
+        encoded_patient = model._encode_patient(req.patient_data).iloc[0].to_dict()
+
+        result = simulate_timeline(
+            encoded_patient,
+            model.predict,
+            req.intervention_keys,
+        )
+
         return result
     except Exception as exc:
-        logger.exception("Timeline error"); raise HTTPException(500, str(exc))
-
+        logger.exception("Timeline error")
+        raise HTTPException(500, str(exc))
 
 # ════════════════════════════════════════════════════════════════════════════
 # FEATURE 2 — District Heatmap
@@ -102,33 +111,349 @@ async def map_symptoms(req: SymptomChatRequest):
 
 class PDFReportRequest(BaseModel):
     patient_data: Dict[str, Any]
-    prediction: Dict[str, Any]
+    prediction: Dict[str, Any] = {}
     agent_summary: Optional[str] = None
     language: str = "en"
-    patient_name: str = "Patient"
 
 
-@router.post("/report/pdf", summary="F4: Generate bilingual branded health report PDF")
+@router.post(
+    "/report/pdf",
+    summary="F4: Generate bilingual personalised health report PDF",
+)
 async def generate_pdf(req: PDFReportRequest):
     try:
         from features.pdf_report import generate_pdf_report
+
+        # ---------------------------------------------------------------------
+        # COPY PATIENT DATA
+        # ---------------------------------------------------------------------
+
+        patient_data = dict(
+            req.patient_data or {}
+        )
+
+        # ---------------------------------------------------------------------
+        # GET PATIENT NAME FROM PATIENT DATA
+        # ---------------------------------------------------------------------
+        # The PDF should have one source of truth for the patient's identity.
+        # We no longer accept a separate patient_name field.
+
+        patient_name = (
+            patient_data.get("patient_name")
+            or patient_data.get("name")
+            or patient_data.get("full_name")
+            or patient_data.get("username")
+            or "Patient"
+        )
+
+        patient_name = str(
+            patient_name
+        ).strip() or "Patient"
+
+        # ---------------------------------------------------------------------
+        # PREDICTION
+        # ---------------------------------------------------------------------
+
+        prediction = dict(
+            req.prediction or {}
+        )
+
+        required_report_keys = {
+            "diabetes_risk",
+            "cardiovascular_risk",
+            "combined_risk_score",
+        }
+
+        # ---------------------------------------------------------------------
+        # GENERATE PREDICTION IF FRONTEND DID NOT PROVIDE ONE
+        # ---------------------------------------------------------------------
+
+        if not required_report_keys.issubset(
+            prediction.keys()
+        ):
+
+            from ml.model import get_model
+
+            model = get_model()
+
+            model_patient = {
+                "age": patient_data.get(
+                    "age"
+                ),
+
+                "gender": patient_data.get(
+                    "gender",
+                    "male",
+                ),
+
+                "bmi": patient_data.get(
+                    "bmi"
+                ),
+
+                "blood_pressure_systolic": patient_data.get(
+                    "blood_pressure_systolic"
+                ),
+
+                "blood_pressure_diastolic": patient_data.get(
+                    "blood_pressure_diastolic"
+                ),
+
+                "fasting_glucose": patient_data.get(
+                    "fasting_glucose"
+                ),
+
+                "hba1c": patient_data.get(
+                    "hba1c"
+                ),
+
+                "cholesterol_total": patient_data.get(
+                    "cholesterol_total"
+                ),
+
+                "cholesterol_hdl": patient_data.get(
+                    "cholesterol_hdl"
+                ),
+
+                "cholesterol_ldl": patient_data.get(
+                    "cholesterol_ldl"
+                ),
+
+                "triglycerides": patient_data.get(
+                    "triglycerides"
+                ),
+
+                "smoking": patient_data.get(
+                    "smoking",
+                    False,
+                ),
+
+                "family_history_diabetes": patient_data.get(
+                    "family_history_diabetes",
+                    False,
+                ),
+
+                "family_history_cvd": patient_data.get(
+                    "family_history_cvd",
+                    False,
+                ),
+
+                "physical_activity": patient_data.get(
+                    "physical_activity",
+                    "moderate",
+                ),
+            }
+
+            prediction = model.predict(
+                model_patient
+            )
+
+            if not isinstance(
+                prediction,
+                dict,
+            ):
+                raise ValueError(
+                    "Model prediction must be a dictionary"
+                )
+
+        # ---------------------------------------------------------------------
+        # VALIDATE / NORMALIZE PREDICTION VALUES
+        # ---------------------------------------------------------------------
+
+        try:
+
+            dia_risk = prediction.get(
+                "diabetes_risk",
+                {},
+            )
+
+            cvd_risk = prediction.get(
+                "cardiovascular_risk",
+                {},
+            )
+
+            if not isinstance(
+                dia_risk,
+                dict,
+            ):
+                dia_risk = {}
+
+            if not isinstance(
+                cvd_risk,
+                dict,
+            ):
+                cvd_risk = {}
+
+            dia_probability = float(
+                dia_risk.get(
+                    "probability",
+                    0,
+                ) or 0
+            )
+
+            cvd_probability = float(
+                cvd_risk.get(
+                    "probability",
+                    0,
+                ) or 0
+            )
+
+            dia_probability = max(
+                0.0,
+                min(
+                    dia_probability,
+                    1.0,
+                ),
+            )
+
+            cvd_probability = max(
+                0.0,
+                min(
+                    cvd_probability,
+                    1.0,
+                ),
+            )
+
+            # -------------------------------------------------------------
+            # Combined score is expected to be 0–1.
+            # If it does not exist, calculate it from the two probabilities.
+            # -------------------------------------------------------------
+
+            combined_score = prediction.get(
+                "combined_risk_score"
+            )
+
+            if combined_score is None:
+
+                combined_score = (
+                    dia_probability
+                    + cvd_probability
+                ) / 2
+
+                prediction[
+                    "combined_risk_score"
+                ] = combined_score
+
+            else:
+
+                combined_score = float(
+                    combined_score
+                )
+
+                # Protect against invalid model output.
+                if combined_score > 1.0:
+                    combined_score = (
+                        combined_score / 100.0
+                    )
+
+                combined_score = max(
+                    0.0,
+                    min(
+                        combined_score,
+                        1.0,
+                    ),
+                )
+
+                prediction[
+                    "combined_risk_score"
+                ] = combined_score
+
+        except (
+            TypeError,
+            ValueError,
+        ) as exc:
+
+            logger.exception(
+                "Invalid prediction values"
+            )
+
+            raise HTTPException(
+                status_code=422,
+                detail=(
+                    "Prediction contains invalid "
+                    "risk probability values"
+                ),
+            ) from exc
+
+        # ---------------------------------------------------------------------
+        # DO NOT RECALCULATE A SECOND RISK SCALE HERE
+        # ---------------------------------------------------------------------
+        #
+        # pdf_report.py is the single source of truth for report risk levels.
+        #
+        # This prevents the previous bug where:
+        #
+        #     0.112
+        #
+        # was compared against:
+        #
+        #     30 and 70
+        #
+        # ---------------------------------------------------------------------
+
+        # ---------------------------------------------------------------------
+        # GENERATE PDF
+        # ---------------------------------------------------------------------
+
         pdf_bytes = generate_pdf_report(
-            patient=req.patient_data,
-            prediction=req.prediction,
+            patient=patient_data,
+            prediction=prediction,
             agent_summary=req.agent_summary,
             language=req.language,
-            patient_name=req.patient_name,
+            patient_name=patient_name,
         )
+
+        # ---------------------------------------------------------------------
+        # SAFE FILE NAME
+        # ---------------------------------------------------------------------
+
+        safe_name = "".join(
+            c
+            for c in patient_name
+            if c.isalnum()
+            or c in (
+                " ",
+                "_",
+                "-",
+            )
+        ).strip()
+
+        safe_name = (
+            safe_name.replace(
+                " ",
+                "_",
+            )
+            or "Patient"
+        )
+
+        # ---------------------------------------------------------------------
+        # RESPONSE
+        # ---------------------------------------------------------------------
+
         return StreamingResponse(
-            io.BytesIO(pdf_bytes),
+            io.BytesIO(
+                pdf_bytes
+            ),
             media_type="application/pdf",
             headers={
-                "Content-Disposition": f"attachment; filename=MediGuard_Report_{req.patient_name}.pdf"
+                "Content-Disposition": (
+                    f'attachment; filename="MediGuard_Report_{safe_name}.pdf"'
+                )
             },
         )
-    except Exception as exc:
-        logger.exception("PDF generation error"); raise HTTPException(500, str(exc))
 
+    except HTTPException:
+        raise
+
+    except Exception as exc:
+
+        logger.exception(
+            "PDF generation error"
+        )
+
+        raise HTTPException(
+            status_code=500,
+            detail="Unable to generate health report",
+        ) from exc
 
 # ════════════════════════════════════════════════════════════════════════════
 # FEATURE 5 — Lab Report OCR Auto-Fill

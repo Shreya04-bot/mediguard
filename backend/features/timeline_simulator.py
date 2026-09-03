@@ -187,8 +187,9 @@ def simulate_timeline(
                 pred = baseline_result
             else:
                 # Apply deltas year by year (cumulative)
-                for _ in range(1):
-                    state = _apply_deltas(state, intv["deltas"], year)
+                state = copy.deepcopy(patient)
+                for elapsed_year in range(1, year+1):
+                    state = _apply_deltas(state, intv["deltas"], elapsed_year)
                 pred = base_predict_fn(state)
 
             dia_probs.append(round(pred["diabetes"]["probability"], 4))

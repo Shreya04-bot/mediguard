@@ -251,6 +251,10 @@ const WellnessHistoryPage = lazy(() =>
   }))
 );
 
+const TimelineSimulatorPage = lazy(() =>
+  import("@/pages/ayurveda/TimelineSimulatorPage")
+);
+
 // IMPORTANT:
 // AyurvedaAgentPage is imported ONLY here.
 // Do NOT add a normal import at the top of this file.
@@ -810,6 +814,17 @@ export function App() {
                       <ProtectedRoute>
                         <DashboardLayout>
                           <WellnessHistoryPage />
+                        </DashboardLayout>
+                      </ProtectedRoute>
+                    }
+                  />
+
+                  <Route
+                    path="/ayurveda/timeline"
+                    element={
+                      <ProtectedRoute>
+                        <DashboardLayout>
+                          <TimelineSimulatorPage />
                         </DashboardLayout>
                       </ProtectedRoute>
                     }

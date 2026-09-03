@@ -19,3 +19,10 @@ build/
 
 # misc
 .DS_Store
+frontend/srcold/
+frontend/src.zip
+
+# local database and generated vector stores
+backend/data/mediguard_users.db
+backend/data/chroma_db/
+backend/data/chroma_ayurveda/

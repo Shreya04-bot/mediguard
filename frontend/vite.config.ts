@@ -22,6 +22,8 @@ export default defineConfig({
     // which doesn't exist there — every request would 404. This proxy
     // is what makes the documented "two terminals, npm run dev + uvicorn"
     // workflow in docs/MANUAL_RUN_GUIDE.md actually work.
+    host: "0.0.0.0",
+    port: 5173,
     proxy: {
       "/api": {
         target: "http://localhost:8000",

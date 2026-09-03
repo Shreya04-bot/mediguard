@@ -36,4 +36,9 @@ import api from "./api";
  * @param {"admin"|"doctor"|"patient"} userRole
  * @returns {Promise<{ reply: string }>}
  */
-export const sendChatMessageApi = (message, history, userRole) => api.post("/ai/chat", { message, history, userRole });
+export const sendChatMessageApi = (message, history, userRole) =>
+  api.post("/ai/chat", {
+    message,
+    history,
+    userRole,
+  });
