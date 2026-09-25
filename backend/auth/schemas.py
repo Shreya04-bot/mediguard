@@ -22,10 +22,11 @@ class RegisterRequest(BaseModel):
     role: str = Field(default="patient", pattern="^(patient|doctor)$")
     preferred_language: str = Field(default="en", pattern="^(en|hi)$")
 
-    # UI/avatar gender (distinct from PatientProfile.gender, which is
-    # clinical and feeds the ML risk models). Optional so existing
-    # clients that don't send it keep working — treated as "neutral".
-    gender: Optional[str] = Field(default=None, pattern="^(female|male|neutral)$")
+    # Canonical gender value — same field/values used for the avatar system
+    # AND (for patients) the clinical/ML value; see utils/health_calculations
+    # .normalize_gender. Optional so existing clients that don't send it
+    # keep working — treated as "neutral" (prefer not to say).
+    gender: Optional[str] = Field(default=None, pattern="^(female|male|other|neutral)$")
 
     # Proves this email passed the OTP flow (POST /auth/register/verify-otp).
     # Optional at the schema level so a clear, custom 401 can be raised in
@@ -80,6 +81,18 @@ class RefreshRequest(BaseModel):
     refreshToken: str
 
 
+class InviteValidateResponse(BaseModel):
+    valid: bool
+    email: Optional[EmailStr] = None
+    role: Optional[str] = None
+
+
+class AcceptInviteRequest(BaseModel):
+    token: str
+    name: str = Field(..., min_length=2, max_length=120)
+    password: str = Field(..., min_length=8, max_length=128)
+
+
 class UserOut(BaseModel):
     id: str
     name: str
@@ -96,6 +109,12 @@ class UserOut(BaseModel):
     avatar_key: Optional[str] = None
     profile_photo_url: Optional[str] = None
 
+    # True once every field required for this role's core features (risk
+    # prediction, dashboards, doctor patient-detail view, etc.) has been
+    # collected. Drives the "Complete your profile" prompt instead of
+    # silently leaving features degraded for existing/incomplete accounts.
+    profile_complete: bool = True
+
     class Config:
         from_attributes = True
 
@@ -108,7 +127,7 @@ class UpdateProfileRequest(BaseModel):
     PUT /patient/profile / PUT /doctor/profile endpoints."""
 
     name: Optional[str] = Field(default=None, min_length=2, max_length=120)
-    gender: Optional[str] = Field(default=None, pattern="^(female|male|neutral)$")
+    gender: Optional[str] = Field(default=None, pattern="^(female|male|other|neutral)$")
     avatar_key: Optional[str] = Field(default=None, max_length=50)
     # Explicit flag, since "avatar_key omitted" (no change) and "avatar_key
     # cleared" (revert to gender default) need to mean different things.
@@ -161,6 +180,23 @@ class PatientProfileOut(BaseModel):
     address: Optional[str] = None
     emergency_contact: Optional[str] = None
     medical_history: Optional[str] = None
+
+    # Health profile
+    height_cm: Optional[float] = None
+    weight_kg: Optional[float] = None
+    smoking: bool = False
+    physical_activity_level: Optional[str] = None
+    family_history_diabetes: bool = False
+    family_history_cvd: bool = False
+    allergies: Optional[str] = None
+    current_medications: Optional[str] = None
+    dietary_preference: Optional[str] = None
+
+    # Derived, never stored directly
+    age: Optional[int] = None
+    bmi: Optional[float] = None
+    bmi_category: Optional[str] = None
+    profile_complete: bool = False
 
     class Config:
         from_attributes = True

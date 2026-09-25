@@ -22,6 +22,27 @@ export default defineConfig({
     // which doesn't exist there — every request would 404. This proxy
     // is what makes the documented "two terminals, npm run dev + uvicorn"
     // workflow in docs/MANUAL_RUN_GUIDE.md actually work.
+    // strictPort: without this, if port 5173 is already occupied (e.g. a
+    // previous `npm run dev` left running in another terminal), Vite
+    // silently falls back to 5174/5175/... while printing that to ITS
+    // OWN terminal only. Nothing else is told. The backend's admin-invite
+    // email always builds its link from FRONTEND_BASE_URL (hardcoded/env
+    // default of http://localhost:5173 — see backend/utils/config.py),
+    // so a silent port drift here means:
+    //   - a stale dev-server process (pre-dating a new route/page you
+    //     just added) can still be alive on 5173 and served instead —
+    //     it has an older bundle, so an unmapped path silently falls
+    //     through to the catch-all route in App.tsx instead of the new
+    //     page (this is what causes "opening the invite link shows the
+    //     dashboard" — it's the OLD build responding, not the current
+    //     one)
+    //   - or, if that stale process is later killed, the link 404s at
+    //     the network level: ERR_CONNECTION_REFUSED, because nothing is
+    //     listening on 5173 anymore
+    // strictPort makes Vite refuse to silently rebind — it fails loudly
+    // instead, so a stray process on 5173 is caught immediately instead
+    // of producing these confusing downstream symptoms.
+    strictPort: true,
     host: "0.0.0.0",
     port: 5173,
     proxy: {

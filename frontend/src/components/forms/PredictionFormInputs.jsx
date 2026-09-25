@@ -26,6 +26,7 @@ export const PredictionFormInputs = ({ form, setForm }) => {
             { label: "Type 2 Diabetes Mellitus", value: "Type 2 Diabetes" },
             { label: "Cardiovascular Risk", value: "Cardiovascular Risk" },
             { label: "Hypertension", value: "Hypertension" },
+            { label: "Combined Risk Profile", value: "Combined Risk" },
           ]}
         />
         <FormSelect

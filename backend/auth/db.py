@@ -45,6 +45,46 @@ def __getattr__(name: str):
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 
+# --- Lightweight column migrations -----------------------------------------
+# This project has no Alembic/migration tool: `Base.metadata.create_all()`
+# below only creates tables that don't exist yet, it never adds columns to
+# tables that already exist. Since patient_profiles pre-dates the health
+# profile fields, existing SQLite databases need those columns added
+# in-place (SQLite supports ADD COLUMN) without touching existing rows.
+# Each entry is (table, column, DDL-fragment). Safe to run on every
+# startup — it only adds columns that are actually missing.
+_COLUMN_MIGRATIONS = [
+    ("patient_profiles", "height_cm", "FLOAT"),
+    ("patient_profiles", "weight_kg", "FLOAT"),
+    ("patient_profiles", "smoking", "BOOLEAN DEFAULT 0"),
+    ("patient_profiles", "physical_activity_level", "VARCHAR(20)"),
+    ("patient_profiles", "family_history_diabetes", "BOOLEAN DEFAULT 0"),
+    ("patient_profiles", "family_history_cvd", "BOOLEAN DEFAULT 0"),
+    ("patient_profiles", "allergies", "TEXT"),
+    ("patient_profiles", "current_medications", "TEXT"),
+    ("patient_profiles", "dietary_preference", "VARCHAR(30)"),
+]
+
+
+def _run_column_migrations() -> None:
+    from sqlalchemy import text, inspect
+
+    inspector = inspect(engine)
+    existing_tables = set(inspector.get_table_names())
+    with engine.begin() as conn:
+        for table, column, ddl_type in _COLUMN_MIGRATIONS:
+            if table not in existing_tables:
+                continue  # table itself doesn't exist yet — create_all() below will create it with the new column already included
+            existing_columns = {c["name"] for c in inspector.get_columns(table)}
+            if column in existing_columns:
+                continue
+            try:
+                conn.execute(text(f"ALTER TABLE {table} ADD COLUMN {column} {ddl_type}"))
+            except Exception:
+                # Best-effort: never block startup or destroy existing data over a migration hiccup.
+                pass
+
+
 def init_db() -> None:
     """Create tables if they don't exist and seed default admin user."""
     # Import models so Base.metadata is fully populated
@@ -63,6 +103,7 @@ def init_db() -> None:
     from models.family_member import FamilyMember
     from models.appointment import Appointment
 
+    _run_column_migrations()
     Base.metadata.create_all(bind=engine)
 
     # Seed default admin if no user exists

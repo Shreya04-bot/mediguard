@@ -8,7 +8,7 @@ from __future__ import annotations
 import logging
 from typing import List, Dict, Any, Optional
 from fastapi import APIRouter, Depends, HTTPException, status
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, field_validator
 from sqlalchemy.orm import Session
 
 from auth.db import get_db, User
@@ -16,6 +16,7 @@ from auth.dependencies import get_current_user, require_role
 from services.patient_service import PatientService
 from services.linking_service import LinkingService
 from services.notification_service import NotificationService
+from utils.health_calculations import validate_dob, normalize_gender
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -23,12 +24,35 @@ router = APIRouter()
 
 class PatientProfileUpdate(BaseModel):
     dob: Optional[str] = None
-    gender: Optional[str] = None
-    blood_group: Optional[str] = None
-    phone: Optional[str] = None
-    address: Optional[str] = None
-    emergency_contact: Optional[str] = None
-    medical_history: Optional[str] = None
+    gender: Optional[str] = Field(default=None, pattern="^(female|male|other|neutral)$")
+    blood_group: Optional[str] = Field(default=None, max_length=10)
+    phone: Optional[str] = Field(default=None, max_length=20)
+    address: Optional[str] = Field(default=None, max_length=2000)
+    emergency_contact: Optional[str] = Field(default=None, max_length=100)
+    medical_history: Optional[str] = Field(default=None, max_length=4000)
+
+    # Health profile — feeds AI prediction pre-fill, BMI, and dashboards.
+    height_cm: Optional[float] = Field(default=None, ge=50, le=250)
+    weight_kg: Optional[float] = Field(default=None, ge=2, le=400)
+    smoking: Optional[bool] = None
+    physical_activity_level: Optional[str] = Field(
+        default=None, pattern="^(sedentary|light|moderate|active)$"
+    )
+    family_history_diabetes: Optional[bool] = None
+    family_history_cvd: Optional[bool] = None
+    allergies: Optional[str] = Field(default=None, max_length=2000)
+    current_medications: Optional[str] = Field(default=None, max_length=2000)
+    dietary_preference: Optional[str] = Field(
+        default=None, pattern="^(vegetarian|vegan|non_vegetarian|eggetarian|other)$"
+    )
+
+    @field_validator("dob")
+    @classmethod
+    def _validate_dob(cls, v):
+        try:
+            return validate_dob(v)
+        except ValueError as e:
+            raise ValueError(str(e))
 
 
 class LinkRequestPayload(BaseModel):
@@ -42,18 +66,7 @@ async def get_patient_profile(
     db: Session = Depends(get_db),
 ):
     profile = PatientService.get_or_create_profile(db, current_user.id)
-    return {
-        "user_id": current_user.id,
-        "name": current_user.name,
-        "email": current_user.email,
-        "dob": profile.dob,
-        "gender": profile.gender,
-        "blood_group": profile.blood_group,
-        "phone": profile.phone,
-        "address": profile.address,
-        "emergency_contact": profile.emergency_contact,
-        "medical_history": profile.medical_history,
-    }
+    return PatientService.serialize_profile(current_user, profile)
 
 
 @router.put("/profile", summary="Update patient profile")
@@ -62,8 +75,13 @@ async def update_patient_profile(
     current_user: User = Depends(require_role("patient")),
     db: Session = Depends(get_db),
 ):
-    profile = PatientService.update_profile(db, current_user.id, payload.model_dump())
-    return {"status": "success", "profile": profile}
+    # Only fields explicitly present in the request overwrite existing
+    # data — omitted fields are left untouched (partial update), while
+    # `None` for a field the client did send is *not* possible here since
+    # every field defaults to None when omitted; PatientService.update_profile
+    # already only writes keys with a non-None value.
+    profile = PatientService.update_profile(db, current_user, payload.model_dump(exclude_unset=True))
+    return {"status": "success", "profile": PatientService.serialize_profile(current_user, profile)}
 
 
 @router.get("/doctors", summary="Get verified doctors list available to link")

@@ -7,6 +7,38 @@ import os
 from typing import List
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+
+def _resolve_frontend_base_url() -> str:
+    """
+    Resolves the frontend origin used to build links sent in
+    transactional emails (e.g. the admin-invite accept-link).
+
+    Resolution order:
+      1. Explicit FRONTEND_BASE_URL env var, if set — always wins.
+      2. GitHub Codespaces auto-detection: CODESPACE_NAME and
+         GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN are set automatically
+         inside every Codespace. There, "localhost:5173" is real *inside
+         the container*, but the browser never sees that address — it
+         only ever reaches the forwarded HTTPS URL
+         (https://<codespace-name>-5173.<forwarding-domain>). A hardcoded
+         "localhost:5173" default would silently build invite links the
+         browser can never resolve, so this case is detected explicitly.
+      3. Plain http://localhost:5173 — correct default for a normal
+         (non-Codespaces) local dev setup, where Vite's `strictPort`
+         (see frontend/vite.config.ts) guarantees it's always this port.
+    """
+    explicit = os.getenv("FRONTEND_BASE_URL")
+    if explicit:
+        return explicit
+    codespace_name = os.getenv("CODESPACE_NAME")
+    if codespace_name:
+        forwarding_domain = os.getenv(
+            "GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN", "app.github.dev"
+        )
+        return f"https://{codespace_name}-5173.{forwarding_domain}"
+    return "http://localhost:5173"
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore", protected_namespaces=())
 
@@ -91,5 +123,10 @@ class Settings(BaseSettings):
     smtp_password: str = os.getenv("SMTP_PASSWORD", "")
     smtp_from_email: str = os.getenv("SMTP_FROM_EMAIL", "no-reply@mediguard.ai")
     smtp_use_tls: bool = os.getenv("SMTP_USE_TLS", "true").lower() == "true"
+
+    # Base URL of the deployed frontend, used to build links sent in
+    # transactional emails (e.g. the admin invite accept-link).
+    # See _resolve_frontend_base_url() below for the resolution order.
+    frontend_base_url: str = _resolve_frontend_base_url()
 
 settings = Settings()

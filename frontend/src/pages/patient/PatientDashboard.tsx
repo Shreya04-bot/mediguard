@@ -82,6 +82,19 @@ export default function PatientDashboard() {
 
   return (
     <div className="mx-auto w-full max-w-[1450px] space-y-5 pb-8">
+      {user && user.profile_complete === false && (
+        <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
+          className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 rounded-2xl border border-amber-500/30 bg-amber-50 dark:bg-amber-500/10 px-5 py-3.5">
+          <div className="text-sm text-amber-800 dark:text-amber-300">
+            <span className="font-semibold">Complete your health profile</span> — add your DOB, height/weight, and
+            lifestyle details so AI predictions and your dashboard use your real data instead of placeholders.
+          </div>
+          <Button asChild size="sm" variant="outline" className="border-amber-500/40 bg-background/60 shrink-0">
+            <Link to="/dashboard/patient/profile">Complete now</Link>
+          </Button>
+        </motion.div>
+      )}
+
       <motion.section initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="relative overflow-hidden rounded-[30px] border border-border/60 bg-card shadow-sm dark:shadow-none">
         <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-28 left-[38%] h-64 w-64 rounded-full bg-emerald-500/10 blur-3xl" />

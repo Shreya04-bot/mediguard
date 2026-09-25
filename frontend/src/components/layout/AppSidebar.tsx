@@ -121,6 +121,11 @@ const doctorNav = [
     icon: Users,
   },
   {
+    title: "Family Cluster",
+    url: "/dashboard/doctor/family-cluster",
+    icon: UserRound,
+  },
+  {
     title: "Appointments",
     url: "/dashboard/doctor/appointments",
     icon: Calendar,
@@ -251,7 +256,7 @@ const ayurvedaNav = [
     url: "/ayurveda/agent",
     icon: Sparkles,
   },
- {
+  {
     title: "Health Timeline",
     url: "/ayurveda/timeline",
     icon: GitBranch,

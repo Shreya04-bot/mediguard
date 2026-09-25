@@ -8,6 +8,7 @@ import { ProtectedRoute } from "@/routes/ProtectedRoute";
 import { DashboardLayout } from "@/layouts/DashboardLayout";
 import { Spinner } from "@/components/ui/spinner";
 import { Toaster } from "@/components/ui/sonner";
+import { RouteErrorBoundary } from "@/components/system/RouteErrorBoundary";
 
 import AyurvedaAgentPage from "@/pages/ayurveda/AyurvedaAgentPage";
 
@@ -15,6 +16,7 @@ import AyurvedaAgentPage from "@/pages/ayurveda/AyurvedaAgentPage";
 const LandingPage = lazy(() => import("@/pages/landing/LandingPage"));
 const LoginPage = lazy(() => import("@/pages/auth/LoginPage"));
 const RegisterPage = lazy(() => import("@/pages/auth/RegisterPage"));
+const AcceptInvitePage = lazy(() => import("@/pages/auth/AcceptInvitePage"));
 const ForgotPasswordPage = lazy(() =>
   import("@/pages/auth/ForgotPasswordPage")
 );
@@ -22,6 +24,9 @@ const ForgotPasswordPage = lazy(() =>
 // =========================================================
 // PATIENT
 // =========================================================
+const PatientOnboardingPage = lazy(() =>
+  import("@/components/patient/PatientOnboardingPage")
+);
 
 const PatientDashboard = lazy(() =>
   import("@/pages/patient/PatientDashboard")
@@ -298,614 +303,628 @@ export function App() {
         <AuthProvider>
           <NotificationProvider>
             <BrowserRouter>
-              <Suspense fallback={<PageLoader />}>
-                <Routes>
+              <RouteErrorBoundary>
+                <Suspense fallback={<PageLoader />}>
+                  <Routes>
 
-                  {/* =================================================
+                    {/* =================================================
                       ROOT / AUTH
                   ================================================= */}
 
-                  <Route
-                    path="/"
-                    element={<RootRedirect />}
-                  />
+                    <Route
+                      path="/"
+                      element={<RootRedirect />}
+                    />
 
-                  <Route
-                    path="/landing"
-                    element={<LandingPage />}
-                  />
+                    <Route
+                      path="/landing"
+                      element={<LandingPage />}
+                    />
 
-                  <Route
-                    path="/login"
-                    element={<LoginPage />}
-                  />
+                    <Route
+                      path="/login"
+                      element={<LoginPage />}
+                    />
 
-                  <Route
-                    path="/register"
-                    element={<RegisterPage />}
-                  />
+                    <Route
+                      path="/register"
+                      element={<RegisterPage />}
+                    />
 
-                  <Route
-                    path="/forgot-password"
-                    element={<ForgotPasswordPage />}
-                  />
+                    <Route
+                      path="/accept-invite"
+                      element={<AcceptInvitePage />}
+                    />
 
-                  {/* =================================================
+                    <Route
+                      path="/forgot-password"
+                      element={<ForgotPasswordPage />}
+                    />
+
+                    {/* =================================================
                       PATIENT ROUTES
                   ================================================= */}
 
-                  <Route
-                    path="/dashboard/patient"
-                    element={
-                      <ProtectedRoute allowedRoles={["patient"]}>
-                        <DashboardLayout>
-                          <PatientDashboard />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/onboarding/patient"
+                      element={
+                        <ProtectedRoute allowedRoles={["patient"]}>
+                          <PatientOnboardingPage />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/dashboard/patient"
+                      element={
+                        <ProtectedRoute allowedRoles={["patient"]}>
+                          <DashboardLayout>
+                            <PatientDashboard />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/patient/predict"
-                    element={
-                      <ProtectedRoute allowedRoles={["patient"]}>
-                        <DashboardLayout>
-                          <PatientPredictPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/patient/predict"
+                      element={
+                        <ProtectedRoute allowedRoles={["patient"]}>
+                          <DashboardLayout>
+                            <PatientPredictPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/patient/reports"
-                    element={
-                      <ProtectedRoute allowedRoles={["patient"]}>
-                        <DashboardLayout>
-                          <PatientReportsPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/patient/reports"
+                      element={
+                        <ProtectedRoute allowedRoles={["patient"]}>
+                          <DashboardLayout>
+                            <PatientReportsPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/patient/timeline"
-                    element={
-                      <ProtectedRoute allowedRoles={["patient"]}>
-                        <DashboardLayout>
-                          <PatientTimelinePage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/patient/timeline"
+                      element={
+                        <ProtectedRoute allowedRoles={["patient"]}>
+                          <DashboardLayout>
+                            <PatientTimelinePage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/patient/chat"
-                    element={
-                      <ProtectedRoute allowedRoles={["patient"]}>
-                        <DashboardLayout>
-                          <SymptomChatPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/patient/chat"
+                      element={
+                        <ProtectedRoute allowedRoles={["patient"]}>
+                          <DashboardLayout>
+                            <SymptomChatPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/patient/family"
-                    element={
-                      <ProtectedRoute allowedRoles={["patient"]}>
-                        <DashboardLayout>
-                          <FamilyClusterPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/patient/family"
+                      element={
+                        <ProtectedRoute allowedRoles={["patient"]}>
+                          <DashboardLayout>
+                            <FamilyClusterPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/patient/profile"
-                    element={
-                      <ProtectedRoute allowedRoles={["patient"]}>
-                        <DashboardLayout>
-                          <PatientProfilePage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/patient/profile"
+                      element={
+                        <ProtectedRoute allowedRoles={["patient"]}>
+                          <DashboardLayout>
+                            <PatientProfilePage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/patient/notifications"
-                    element={
-                      <ProtectedRoute allowedRoles={["patient"]}>
-                        <DashboardLayout>
-                          <PatientNotificationsPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/patient/notifications"
+                      element={
+                        <ProtectedRoute allowedRoles={["patient"]}>
+                          <DashboardLayout>
+                            <PatientNotificationsPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/patient/voice"
-                    element={
-                      <ProtectedRoute allowedRoles={["patient"]}>
-                        <DashboardLayout>
-                          <VoicePage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/patient/voice"
+                      element={
+                        <ProtectedRoute allowedRoles={["patient"]}>
+                          <DashboardLayout>
+                            <VoicePage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/patient/health-score"
-                    element={
-                      <ProtectedRoute allowedRoles={["patient"]}>
-                        <DashboardLayout>
-                          <HealthScorePage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/patient/health-score"
+                      element={
+                        <ProtectedRoute allowedRoles={["patient"]}>
+                          <DashboardLayout>
+                            <HealthScorePage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/patient/appointments"
-                    element={
-                      <ProtectedRoute allowedRoles={["patient"]}>
-                        <DashboardLayout>
-                          <PatientAppointmentsPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/patient/appointments"
+                      element={
+                        <ProtectedRoute allowedRoles={["patient"]}>
+                          <DashboardLayout>
+                            <PatientAppointmentsPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/patient/settings"
-                    element={
-                      <ProtectedRoute allowedRoles={["patient"]}>
-                        <DashboardLayout>
-                          <PatientSettingsPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/patient/settings"
+                      element={
+                        <ProtectedRoute allowedRoles={["patient"]}>
+                          <DashboardLayout>
+                            <PatientSettingsPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  {/* =================================================
+                    {/* =================================================
                       DOCTOR ROUTES
                   ================================================= */}
 
-                  <Route
-                    path="/dashboard/doctor"
-                    element={
-                      <ProtectedRoute allowedRoles={["doctor"]}>
-                        <DashboardLayout>
-                          <DoctorDashboard />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/doctor"
+                      element={
+                        <ProtectedRoute allowedRoles={["doctor"]}>
+                          <DashboardLayout>
+                            <DoctorDashboard />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/doctor/patients"
-                    element={
-                      <ProtectedRoute allowedRoles={["doctor"]}>
-                        <DashboardLayout>
-                          <DoctorPatientsPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/doctor/patients"
+                      element={
+                        <ProtectedRoute allowedRoles={["doctor"]}>
+                          <DashboardLayout>
+                            <DoctorPatientsPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/doctor/patients/:patientId"
-                    element={
-                      <ProtectedRoute allowedRoles={["doctor"]}>
-                        <DashboardLayout>
-                          <DoctorPatientDetailPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/doctor/patients/:patientId"
+                      element={
+                        <ProtectedRoute allowedRoles={["doctor"]}>
+                          <DashboardLayout>
+                            <DoctorPatientDetailPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/doctor/assistant"
-                    element={
-                      <ProtectedRoute allowedRoles={["doctor"]}>
-                        <DashboardLayout>
-                          <ClinicalAssistantPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/doctor/assistant"
+                      element={
+                        <ProtectedRoute allowedRoles={["doctor"]}>
+                          <DashboardLayout>
+                            <ClinicalAssistantPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/doctor/predictions"
-                    element={
-                      <ProtectedRoute allowedRoles={["doctor"]}>
-                        <DashboardLayout>
-                          <DoctorPredictionPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/doctor/predictions"
+                      element={
+                        <ProtectedRoute allowedRoles={["doctor"]}>
+                          <DashboardLayout>
+                            <DoctorPredictionPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/doctor/reports"
-                    element={
-                      <ProtectedRoute allowedRoles={["doctor"]}>
-                        <DashboardLayout>
-                          <OcrAnalysisPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/doctor/reports"
+                      element={
+                        <ProtectedRoute allowedRoles={["doctor"]}>
+                          <DashboardLayout>
+                            <OcrAnalysisPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/doctor/profile"
-                    element={
-                      <ProtectedRoute allowedRoles={["doctor"]}>
-                        <DashboardLayout>
-                          <DoctorProfilePage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/doctor/profile"
+                      element={
+                        <ProtectedRoute allowedRoles={["doctor"]}>
+                          <DashboardLayout>
+                            <DoctorProfilePage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/doctor/appointments"
-                    element={
-                      <ProtectedRoute allowedRoles={["doctor"]}>
-                        <DashboardLayout>
-                          <DoctorAppointmentsPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/doctor/appointments"
+                      element={
+                        <ProtectedRoute allowedRoles={["doctor"]}>
+                          <DashboardLayout>
+                            <DoctorAppointmentsPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/doctor/analytics"
-                    element={
-                      <ProtectedRoute allowedRoles={["doctor"]}>
-                        <DashboardLayout>
-                          <RiskAnalyticsPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/doctor/analytics"
+                      element={
+                        <ProtectedRoute allowedRoles={["doctor"]}>
+                          <DashboardLayout>
+                            <RiskAnalyticsPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/doctor/timeline"
-                    element={
-                      <ProtectedRoute allowedRoles={["doctor"]}>
-                        <DashboardLayout>
-                          <DoctorTimelinePage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/doctor/timeline"
+                      element={
+                        <ProtectedRoute allowedRoles={["doctor"]}>
+                          <DashboardLayout>
+                            <DoctorTimelinePage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/doctor/family-cluster"
-                    element={
-                      <ProtectedRoute allowedRoles={["doctor"]}>
-                        <DashboardLayout>
-                          <DoctorFamilyClusterPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/doctor/family-cluster"
+                      element={
+                        <ProtectedRoute allowedRoles={["doctor"]}>
+                          <DashboardLayout>
+                            <DoctorFamilyClusterPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/doctor/notifications"
-                    element={
-                      <ProtectedRoute allowedRoles={["doctor"]}>
-                        <DashboardLayout>
-                          <DoctorNotificationsPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/doctor/notifications"
+                      element={
+                        <ProtectedRoute allowedRoles={["doctor"]}>
+                          <DashboardLayout>
+                            <DoctorNotificationsPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/doctor/settings"
-                    element={
-                      <ProtectedRoute allowedRoles={["doctor"]}>
-                        <DashboardLayout>
-                          <DoctorSettingsPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/doctor/settings"
+                      element={
+                        <ProtectedRoute allowedRoles={["doctor"]}>
+                          <DashboardLayout>
+                            <DoctorSettingsPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  {/* =================================================
+                    {/* =================================================
                       ADMIN ROUTES
                   ================================================= */}
 
-                  <Route
-                    path="/dashboard/admin"
-                    element={
-                      <ProtectedRoute allowedRoles={["admin"]}>
-                        <DashboardLayout>
-                          <AdminDashboard />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/admin"
+                      element={
+                        <ProtectedRoute allowedRoles={["admin"]}>
+                          <DashboardLayout>
+                            <AdminDashboard />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/admin/doctors"
-                    element={
-                      <ProtectedRoute allowedRoles={["admin"]}>
-                        <DashboardLayout>
-                          <ManageDoctorsPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/admin/doctors"
+                      element={
+                        <ProtectedRoute allowedRoles={["admin"]}>
+                          <DashboardLayout>
+                            <ManageDoctorsPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/admin/patients"
-                    element={
-                      <ProtectedRoute allowedRoles={["admin"]}>
-                        <DashboardLayout>
-                          <PatientsListPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/admin/patients"
+                      element={
+                        <ProtectedRoute allowedRoles={["admin"]}>
+                          <DashboardLayout>
+                            <PatientsListPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/admin/appointments"
-                    element={
-                      <ProtectedRoute allowedRoles={["admin"]}>
-                        <DashboardLayout>
-                          <AdminAppointmentsPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/admin/appointments"
+                      element={
+                        <ProtectedRoute allowedRoles={["admin"]}>
+                          <DashboardLayout>
+                            <AdminAppointmentsPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/admin/mlops"
-                    element={
-                      <ProtectedRoute allowedRoles={["admin"]}>
-                        <DashboardLayout>
-                          <MLOpsPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/admin/mlops"
+                      element={
+                        <ProtectedRoute allowedRoles={["admin"]}>
+                          <DashboardLayout>
+                            <MLOpsPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/admin/logs"
-                    element={
-                      <ProtectedRoute allowedRoles={["admin"]}>
-                        <DashboardLayout>
-                          <SystemLogsPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/admin/logs"
+                      element={
+                        <ProtectedRoute allowedRoles={["admin"]}>
+                          <DashboardLayout>
+                            <SystemLogsPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/admin/analytics"
-                    element={
-                      <ProtectedRoute allowedRoles={["admin"]}>
-                        <DashboardLayout>
-                          <AnalyticsPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/admin/analytics"
+                      element={
+                        <ProtectedRoute allowedRoles={["admin"]}>
+                          <DashboardLayout>
+                            <AnalyticsPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/admin/trends"
-                    element={
-                      <ProtectedRoute allowedRoles={["admin"]}>
-                        <DashboardLayout>
-                          <AnalyticsPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/admin/trends"
+                      element={
+                        <ProtectedRoute allowedRoles={["admin"]}>
+                          <DashboardLayout>
+                            <AnalyticsPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/admin/settings"
-                    element={
-                      <ProtectedRoute allowedRoles={["admin"]}>
-                        <DashboardLayout>
-                          <SettingsPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/admin/settings"
+                      element={
+                        <ProtectedRoute allowedRoles={["admin"]}>
+                          <DashboardLayout>
+                            <SettingsPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/admin/profile"
-                    element={
-                      <ProtectedRoute allowedRoles={["admin"]}>
-                        <DashboardLayout>
-                          <AdminProfilePage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/admin/profile"
+                      element={
+                        <ProtectedRoute allowedRoles={["admin"]}>
+                          <DashboardLayout>
+                            <AdminProfilePage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/dashboard/admin/notifications"
-                    element={
-                      <ProtectedRoute allowedRoles={["admin"]}>
-                        <DashboardLayout>
-                          <AdminNotificationsPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard/admin/notifications"
+                      element={
+                        <ProtectedRoute allowedRoles={["admin"]}>
+                          <DashboardLayout>
+                            <AdminNotificationsPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  {/* =================================================
+                    {/* =================================================
                       AYURVEDA ROUTES
                   ================================================= */}
 
-                  <Route
-                    path="/ayurveda"
-                    element={
-                      <ProtectedRoute>
-                        <DashboardLayout>
-                          <AyurvedaDashboard />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/ayurveda"
+                      element={
+                        <ProtectedRoute>
+                          <DashboardLayout>
+                            <AyurvedaDashboard />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/ayurveda/quiz"
-                    element={
-                      <ProtectedRoute>
-                        <DashboardLayout>
-                          <PrakritiQuizPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/ayurveda/quiz"
+                      element={
+                        <ProtectedRoute>
+                          <DashboardLayout>
+                            <PrakritiQuizPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/ayurveda/diet"
-                    element={
-                      <ProtectedRoute>
-                        <DashboardLayout>
-                          <DietPlanPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/ayurveda/diet"
+                      element={
+                        <ProtectedRoute>
+                          <DashboardLayout>
+                            <DietPlanPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/ayurveda/yoga"
-                    element={
-                      <ProtectedRoute>
-                        <DashboardLayout>
-                          <YogaPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/ayurveda/yoga"
+                      element={
+                        <ProtectedRoute>
+                          <DashboardLayout>
+                            <YogaPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/ayurveda/herbs"
-                    element={
-                      <ProtectedRoute>
-                        <DashboardLayout>
-                          <HerbalRecommendationsPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/ayurveda/herbs"
+                      element={
+                        <ProtectedRoute>
+                          <DashboardLayout>
+                            <HerbalRecommendationsPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/ayurveda/agent"
-                    element={
-                      <ProtectedRoute>
-                        <DashboardLayout>
-                          <AyurvedaAgentPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/ayurveda/agent"
+                      element={
+                        <ProtectedRoute>
+                          <DashboardLayout>
+                            <AyurvedaAgentPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/ayurveda/history"
-                    element={
-                      <ProtectedRoute>
-                        <DashboardLayout>
-                          <WellnessHistoryPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/ayurveda/history"
+                      element={
+                        <ProtectedRoute>
+                          <DashboardLayout>
+                            <WellnessHistoryPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/ayurveda/timeline"
-                    element={
-                      <ProtectedRoute>
-                        <DashboardLayout>
-                          <TimelineSimulatorPage />
-                        </DashboardLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/ayurveda/timeline"
+                      element={
+                        <ProtectedRoute>
+                          <DashboardLayout>
+                            <TimelineSimulatorPage />
+                          </DashboardLayout>
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  {/* =================================================
+                    {/* =================================================
                       LEGACY REDIRECTS
                   ================================================= */}
 
-                  <Route
-                    path="/patient"
-                    element={
-                      <Navigate
-                        to="/dashboard/patient"
-                        replace
-                      />
-                    }
-                  />
+                    <Route
+                      path="/patient"
+                      element={
+                        <Navigate
+                          to="/dashboard/patient"
+                          replace
+                        />
+                      }
+                    />
 
-                  <Route
-                    path="/patient/:slug"
-                    element={
-                      <Navigate
-                        to="/dashboard/patient"
-                        replace
-                      />
-                    }
-                  />
+                    <Route
+                      path="/patient/:slug"
+                      element={
+                        <Navigate
+                          to="/dashboard/patient"
+                          replace
+                        />
+                      }
+                    />
 
-                  <Route
-                    path="/doctor"
-                    element={
-                      <Navigate
-                        to="/dashboard/doctor"
-                        replace
-                      />
-                    }
-                  />
+                    <Route
+                      path="/doctor"
+                      element={
+                        <Navigate
+                          to="/dashboard/doctor"
+                          replace
+                        />
+                      }
+                    />
 
-                  <Route
-                    path="/doctor/:slug"
-                    element={
-                      <Navigate
-                        to="/dashboard/doctor"
-                        replace
-                      />
-                    }
-                  />
+                    <Route
+                      path="/doctor/:slug"
+                      element={
+                        <Navigate
+                          to="/dashboard/doctor"
+                          replace
+                        />
+                      }
+                    />
 
-                  <Route
-                    path="/admin"
-                    element={
-                      <Navigate
-                        to="/dashboard/admin"
-                        replace
-                      />
-                    }
-                  />
+                    <Route
+                      path="/admin"
+                      element={
+                        <Navigate
+                          to="/dashboard/admin"
+                          replace
+                        />
+                      }
+                    />
 
-                  <Route
-                    path="/admin/:slug"
-                    element={
-                      <Navigate
-                        to="/dashboard/admin"
-                        replace
-                      />
-                    }
-                  />
+                    <Route
+                      path="/admin/:slug"
+                      element={
+                        <Navigate
+                          to="/dashboard/admin"
+                          replace
+                        />
+                      }
+                    />
 
-                  {/* =================================================
+                    {/* =================================================
                       FALLBACK
                   ================================================= */}
 
-                  <Route
-                    path="*"
-                    element={<Navigate to="/" replace />}
-                  />
+                    <Route
+                      path="*"
+                      element={<Navigate to="/" replace />}
+                    />
 
-                </Routes>
-              </Suspense>
-
+                  </Routes>
+                </Suspense>
+              </RouteErrorBoundary>
               <Toaster
                 richColors
                 position="top-right"

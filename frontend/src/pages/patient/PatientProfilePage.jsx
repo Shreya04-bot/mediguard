@@ -3,6 +3,8 @@ import { PageHeader } from "../../components/layout/PageHeader";
 import { UserProfileCard } from "../../components/profile/UserProfileCard";
 import { SettingsForm } from "../../components/profile/SettingsForm";
 import ProfileSettingsCard from "../../components/profile/ProfileSettingsCard";
+import PatientHealthProfileForm from "../../components/patient/PatientHealthProfileForm";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 export const PatientProfilePage = () => {
   return (
@@ -13,6 +15,14 @@ export const PatientProfilePage = () => {
       />
       <UserProfileCard />
       <ProfileSettingsCard />
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base font-bold">Health Profile</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <PatientHealthProfileForm />
+        </CardContent>
+      </Card>
       <SettingsForm />
     </div>
   );

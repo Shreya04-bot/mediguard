@@ -13,6 +13,21 @@ from auth.db import User
 from auth.schemas import UserOut
 from utils.config import settings
 
+def _compute_profile_complete(user: User, db: Session) -> bool:
+    """Whether every field required for this role's core features has been
+    collected. Patients need the demographic/health fields the AI risk
+    model and dashboards depend on (dob, gender, height, weight); doctors
+    already have their required professional fields collected at
+    registration time, so they (and admins) are complete by default."""
+    if user.role == "patient":
+        from models.patient import PatientProfile
+        profile = db.query(PatientProfile).filter(PatientProfile.user_id == user.id).first()
+        if not profile:
+            return False
+        return all([profile.dob, profile.gender, profile.height_cm, profile.weight_kg])
+    return True
+
+
 def build_user_out(user: User, db: Session) -> UserOut:
     specialty = None
     if user.role == "doctor":
@@ -38,4 +53,5 @@ def build_user_out(user: User, db: Session) -> UserOut:
         gender=user.gender,
         avatar_key=user.avatar_key,
         profile_photo_url=photo_url,
+        profile_complete=_compute_profile_complete(user, db),
     )

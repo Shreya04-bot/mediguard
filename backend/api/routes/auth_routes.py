@@ -28,6 +28,7 @@ from auth.schemas import (
     RegisterRequest, LoginRequest, TokenResponse, PendingRegistrationResponse,
     SendOtpRequest, VerifyOtpRequest, PasswordResetRequest, RefreshRequest,
     MeResponse, MessageResponse, OtpSentResponse, UpdateProfileRequest,
+    InviteValidateResponse, AcceptInviteRequest,
 )
 from auth.security import hash_password, verify_password
 from models.patient import PatientProfile
@@ -35,7 +36,9 @@ from models.doctor_profile import DoctorProfile
 from services.audit_service import AuditService
 from services.otp_service import OtpService
 from services.session_service import SessionService
+from services.invite_service import InviteService
 from utils.config import settings
+from utils.health_calculations import normalize_gender
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -105,6 +108,8 @@ async def register(payload: RegisterRequest, request: Request, response: Respons
     # Doctors require admin verification; Patients are auto-approved
     v_status = "pending" if role == "doctor" else "approved"
 
+    normalized_gender = normalize_gender(payload.gender)
+
     user_id = str(uuid.uuid4())
     user = User(
         id=user_id,
@@ -114,7 +119,7 @@ async def register(payload: RegisterRequest, request: Request, response: Respons
         role=role,
         verification_status=v_status,
         preferred_language=payload.preferred_language,
-        gender=payload.gender,  # null is fine — frontend/backend both treat null as "neutral"
+        gender=normalized_gender,  # null is fine — frontend/backend both treat null as "neutral"
     )
     db.add(user)
     db.commit()
@@ -131,7 +136,13 @@ async def register(payload: RegisterRequest, request: Request, response: Respons
         )
         db.add(doc_profile)
     else:
-        pat_profile = PatientProfile(user_id=user_id)
+        # Gender chosen at account-creation time is the same canonical
+        # value used for the clinical/ML profile — carried over here so a
+        # patient who picked "female" on the signup screen doesn't have to
+        # pick it again during health onboarding. Height/weight/DOB/etc.
+        # are collected in the onboarding step right after this
+        # (PUT /patient/profile) since they don't block account creation.
+        pat_profile = PatientProfile(user_id=user_id, gender=normalized_gender)
         db.add(pat_profile)
 
     db.commit()
@@ -149,6 +160,46 @@ async def register(payload: RegisterRequest, request: Request, response: Respons
         return PendingRegistrationResponse(
             message="Registration received. An admin will verify your license before you can log in."
         )
+
+    access_token, refresh_token = SessionService.issue(db, user, request.headers.get("user-agent"), _client_ip(request))
+    response.status_code = status.HTTP_201_CREATED
+    return TokenResponse(token=access_token, refreshToken=refresh_token, user=build_user_out(user, db))
+
+
+# ---------------------------------------------------------------------------
+# Admin invite acceptance (invite created by POST /admin/invite — see
+# services/invite_service.py). Public — the token itself is the auth.
+# ---------------------------------------------------------------------------
+
+@router.get(
+    "/invite/{token}",
+    response_model=InviteValidateResponse,
+    summary="Check whether an admin invite token is still valid",
+)
+async def validate_invite(token: str, db: Session = Depends(get_db)):
+    invitation = InviteService.validate_invitation(db, token)
+    if not invitation:
+        return InviteValidateResponse(valid=False)
+    return InviteValidateResponse(valid=True, email=invitation.email, role=invitation.role)
+
+
+@router.post(
+    "/invite/accept",
+    response_model=TokenResponse,
+    summary="Complete registration from a valid admin invite and sign in",
+)
+async def accept_invite(payload: AcceptInviteRequest, request: Request, response: Response, db: Session = Depends(get_db)):
+    try:
+        user = InviteService.accept_invitation(db, payload.token, payload.name, payload.password)
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail={"error": str(e)})
+
+    AuditService.log(
+        db=db, action="invite_accepted", resource=f"user:{user.id}", user_id=user.id,
+        details={"email": user.email, "role": user.role},
+        ip_address=_client_ip(request),
+    )
+    logger.info("Admin account created via invite: %s", user.email)
 
     access_token, refresh_token = SessionService.issue(db, user, request.headers.get("user-agent"), _client_ip(request))
     response.status_code = status.HTTP_201_CREATED

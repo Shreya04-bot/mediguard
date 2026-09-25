@@ -16,6 +16,7 @@ from models.patient import PatientProfile
 from models.doctor_patient_link import DoctorPatientLink
 from models.prediction_history import PredictionHistory
 from models.report import MedicalReport
+from services.patient_service import PatientService
 
 logger = logging.getLogger(__name__)
 
@@ -159,19 +160,32 @@ class DoctorService:
                 "uploaded_at": r.uploaded_at.isoformat(),
             })
 
+        # Reuse the exact same serialization the patient sees on their own
+        # profile — a doctor viewing a patient must see the same real data
+        # (age, BMI, allergies, medications, lifestyle factors), never a
+        # separate/placeholder representation.
+        profile_out = (
+            PatientService.serialize_profile(user, profile) if profile
+            else {"dob": None, "age": None, "gender": None, "blood_group": None, "phone": None,
+                  "address": None, "emergency_contact": None, "medical_history": None,
+                  "height_cm": None, "weight_kg": None, "bmi": None, "bmi_category": None,
+                  "smoking": False, "physical_activity_level": None,
+                  "family_history_diabetes": False, "family_history_cvd": False,
+                  "allergies": None, "current_medications": None, "dietary_preference": None,
+                  "profile_complete": False}
+        )
+        profile_out.pop("user_id", None)
+        profile_out.pop("name", None)
+        profile_out.pop("email", None)
+
         return {
             "patient_id": user.id,
             "name": user.name,
             "email": user.email,
-            "profile": {
-                "dob": profile.dob if profile else None,
-                "gender": profile.gender if profile else None,
-                "blood_group": profile.blood_group if profile else None,
-                "phone": profile.phone if profile else None,
-                "address": profile.address if profile else None,
-                "emergency_contact": profile.emergency_contact if profile else None,
-                "medical_history": profile.medical_history if profile else None,
-            },
+            "avatar": user.avatar_url,
+            "gender": user.gender,
+            "avatar_key": user.avatar_key,
+            "profile": profile_out,
             "predictions": pred_history,
             "reports": report_history,
         }

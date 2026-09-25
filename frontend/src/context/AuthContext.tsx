@@ -1,9 +1,9 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
-import { loginApi, registerApi, getCurrentUserApi, logoutApi } from "@/services/authService";
+import { loginApi, registerApi, getCurrentUserApi, logoutApi, acceptInviteApi } from "@/services/authService";
 
 export type UserRole = "admin" | "doctor" | "patient";
 
-export type Gender = "female" | "male" | "neutral";
+export type Gender = "female" | "male" | "other" | "neutral";
 
 export type User = {
   id: string;
@@ -12,12 +12,17 @@ export type User = {
   role: UserRole;
   avatar?: string;
   specialty?: string;
-  // UI/avatar system. `gender` here is display-only (drives which
-  // avatar/hero illustration set applies) and is separate from any
-  // clinical gender field on a patient's medical profile.
+  // Canonical gender value — same field used for the avatar/UI system AND
+  // (for patients) the clinical/ML value. See backend
+  // utils/health_calculations.normalize_gender for the single mapping
+  // used everywhere.
   gender?: Gender | null;
   avatar_key?: string | null;
   profile_photo_url?: string | null;
+  // False until every field this role's core features depend on has been
+  // collected (patients: DOB, gender, height, weight). Drives the
+  // "Complete your profile" prompt.
+  profile_complete?: boolean;
 };
 
 type AuthContextType = {
@@ -27,6 +32,9 @@ type AuthContextType = {
   login: (email: string, password: string, role: UserRole) => Promise<void>;
   logout: () => void;
   register: (data: RegisterData) => Promise<{ pending: boolean }>;
+  // Completes an admin invite (name + password against an emailed
+  // token) and logs the new admin account straight in.
+  acceptInvite: (token: string, name: string, password: string) => Promise<void>;
   // Merges a partial user update (from a profile/avatar/gender save)
   // into context + localStorage, so every consumer (Sidebar, Navbar,
   // dashboards, profile pages) re-renders with the new value
@@ -112,6 +120,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { pending: false };
   };
 
+  const acceptInvite = async (token: string, name: string, password: string) => {
+    const { token: sessionToken, user: newUser } = await acceptInviteApi({ token, name, password });
+    persistSession(sessionToken, newUser);
+    setUser(newUser);
+  };
+
   const updateUser = (patch: Partial<User>) => {
     setUser((prev) => {
       if (!prev) return prev;
@@ -122,7 +136,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated: !!user, isLoading, login, logout, register, updateUser }}>
+    <AuthContext.Provider value={{ user, isAuthenticated: !!user, isLoading, login, logout, register, acceptInvite, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

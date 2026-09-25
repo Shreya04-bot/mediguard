@@ -87,16 +87,70 @@ export default function DoctorPatientDetailPage() {
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           ["Gender", detail.profile.gender ?? "—"],
+          ["Age", detail.profile.age != null ? `${detail.profile.age} years` : "—"],
+          ["Date of Birth", detail.profile.dob ? formatDate(detail.profile.dob) : "—"],
           ["Blood Group", detail.profile.blood_group ?? "—"],
           ["Phone", detail.profile.phone ?? "—"],
-          ["Date of Birth", detail.profile.dob ? formatDate(detail.profile.dob) : "—"],
+          [
+            "Height / Weight",
+            detail.profile.height_cm != null && detail.profile.weight_kg != null
+              ? `${detail.profile.height_cm} cm / ${detail.profile.weight_kg} kg`
+              : "—",
+          ],
+          [
+            "BMI",
+            detail.profile.bmi != null ? `${detail.profile.bmi} (${detail.profile.bmi_category})` : "—",
+          ],
+          ["Smoking", detail.profile.smoking ? "Yes" : "No"],
+          [
+            "Physical Activity",
+            detail.profile.physical_activity_level
+              ? detail.profile.physical_activity_level.replace("_", " ")
+              : "—",
+          ],
+          [
+            "Dietary Preference",
+            detail.profile.dietary_preference ? detail.profile.dietary_preference.replace("_", "-") : "—",
+          ],
+          [
+            "Family History",
+            [
+              detail.profile.family_history_diabetes && "Diabetes",
+              detail.profile.family_history_cvd && "Heart disease",
+            ]
+              .filter(Boolean)
+              .join(", ") || "None reported",
+          ],
         ].map(([label, value]) => (
           <Card key={label}><CardContent className="p-4">
             <div className="text-xs text-muted-foreground">{label}</div>
-            <div className="font-medium mt-1">{value}</div>
+            <div className="font-medium mt-1 capitalize">{value}</div>
           </CardContent></Card>
         ))}
       </div>
+
+      {!detail.profile.profile_complete && (
+        <div className="rounded-xl border border-amber-500/30 bg-amber-50 dark:bg-amber-500/10 px-4 py-3 text-sm text-amber-800 dark:text-amber-300">
+          This patient hasn't completed their health profile (DOB, height, or weight is missing) — some values above may be unavailable.
+        </div>
+      )}
+
+      {(detail.profile.allergies || detail.profile.current_medications) && (
+        <div className="grid sm:grid-cols-2 gap-4">
+          {detail.profile.allergies && (
+            <Card>
+              <CardHeader><CardTitle className="text-base flex items-center gap-2"><ShieldAlert className="size-4 text-destructive" />Allergies</CardTitle></CardHeader>
+              <CardContent><p className="text-sm text-muted-foreground whitespace-pre-wrap">{detail.profile.allergies}</p></CardContent>
+            </Card>
+          )}
+          {detail.profile.current_medications && (
+            <Card>
+              <CardHeader><CardTitle className="text-base">Current Medications</CardTitle></CardHeader>
+              <CardContent><p className="text-sm text-muted-foreground whitespace-pre-wrap">{detail.profile.current_medications}</p></CardContent>
+            </Card>
+          )}
+        </div>
+      )}
 
       {detail.profile.medical_history && (
         <Card>

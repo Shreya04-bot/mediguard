@@ -32,7 +32,7 @@ async def train_model(
         model = get_model()
         metrics = model.train(force_replace=force_replace)
         return {"status": "success", "metrics": metrics}
-    except Exception as exc:
+    except Excepptionn as exc:
         logger.exception("Training error")
         raise HTTPException(
             status_code=500,

@@ -72,6 +72,10 @@ npm run dev
 ```
 
 - Frontend: http://localhost:5173
+- In a VS Code remote container or GitHub Codespace, use the forwarded URL
+   shown in the **Ports** panel for port 5173 (the `localhost` address is
+   inside the container). This workspace is configured to auto-forward and
+   open ports 5173 and 8000.
 - It's pre-configured to talk to the backend at `http://localhost:8000`
   via a Vite dev-server proxy (`frontend/vite.config.ts` → `server.proxy`,
   forwards `/api/*` to `http://localhost:8000`) — this proxy was actually

@@ -51,6 +51,15 @@ export const fetchVerificationQueueApi = () => api.get("/admin/verification-queu
 /** @returns {Promise<{ status: string, doctor_id: string, verification_status: string }>} */
 export const verifyDoctorApi = (doctorId, decision) => api.post(`/admin/verification/${doctorId}`, { status: decision });
 
+/**
+ * Invites a new administrator by email. Sends an accept-invite link to
+ * that address (valid for 7 days); the token is also returned here so
+ * it can be copied/shared manually if outbound email isn't configured.
+ * @param {string} email
+ * @returns {Promise<{ status: string, invitation_id: string, token: string, email: string, expires_at: string }>}
+ */
+export const inviteAdminApi = (email) => api.post("/admin/invite", { email });
+
 /** @returns {Promise<{
  *   run_id: string, dataset_size: number, psi_score: number, drift_detected: boolean,
  *   feature_drifts: Record<string, number>, recommendation: string

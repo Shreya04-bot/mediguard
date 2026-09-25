@@ -14,7 +14,8 @@ import { normalizeGender } from "@/components/dashboard/dashboardAssets";
 const GENDER_OPTIONS: { value: Gender; label: string }[] = [
   { value: "female", label: "Female" },
   { value: "male", label: "Male" },
-  { value: "neutral", label: "Prefer not to specify" },
+  { value: "other", label: "Other" },
+  { value: "neutral", label: "Prefer not to say" },
 ];
 
 /**

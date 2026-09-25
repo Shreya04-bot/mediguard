@@ -229,3 +229,25 @@ export const verifyPasswordResetOtpApi = (email, otp) =>
  */
 export const resetPasswordApi = (email, resetToken, newPassword) =>
   api.post("/auth/password-reset/reset", { email, resetToken, newPassword });
+
+// ------------------------------------------------------------------
+// Admin invites — an existing admin invites a new admin by email
+// (POST /admin/invite, in adminService.js). The invitee gets an
+// emailed link to /accept-invite?token=... which uses these two.
+// ------------------------------------------------------------------
+
+/**
+ * Checks whether an invite token is still valid (not expired/used),
+ * and returns the invited email so the accept form can show it.
+ * @param {string} token
+ * @returns {Promise<{ valid: boolean, email?: string, role?: "admin" }>}
+ */
+export const validateInviteApi = (token) => api.get(`/auth/invite/${token}`);
+
+/**
+ * Completes registration from a valid invite and signs the new
+ * account in immediately, same response shape as loginApi/registerApi.
+ * @param {{ token: string, name: string, password: string }} data
+ * @returns {Promise<{ token: string, user: AuthUser }>}
+ */
+export const acceptInviteApi = (data) => api.post("/auth/invite/accept", data);

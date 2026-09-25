@@ -31,7 +31,7 @@ const schema = z
     password: z.string().min(8, "Password must be at least 8 characters"),
     confirmPassword: z.string(),
     role: z.enum(["doctor", "patient"] as const),
-    gender: z.enum(["female", "male", "neutral"] as const),
+    gender: z.enum(["female", "male", "other", "neutral"] as const),
     medicalLicenseNumber: z.string().optional(),
     hospitalAffiliation: z.string().optional(),
   })
@@ -154,7 +154,12 @@ export default function RegisterPage() {
 
       setStep("success");
       toast.success("Account created! Welcome to MediGuard AI.");
-      setTimeout(() => navigate(`/dashboard/${pendingData.role}`), 900);
+      // Patients still need their health profile (DOB, height/weight,
+      // lifestyle factors) before the AI prediction/dashboard can use
+      // real data instead of placeholders — doctors already provided
+      // everything required during this same registration form.
+      const destination = pendingData.role === "patient" ? "/onboarding/patient" : `/dashboard/${pendingData.role}`;
+      setTimeout(() => navigate(destination), 900);
     } catch (err) {
       const code = (err as { code?: string })?.code;
       const message = (err as { message?: string })?.message || "Verification failed. Please try again.";
@@ -229,11 +234,12 @@ export default function RegisterPage() {
 
               <div className="space-y-2">
                 <Label>Gender</Label>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-2 gap-2">
                   {[
                     { value: "female" as const, label: "Female" },
                     { value: "male" as const, label: "Male" },
-                    { value: "neutral" as const, label: "Prefer not to specify" },
+                    { value: "other" as const, label: "Other" },
+                    { value: "neutral" as const, label: "Prefer not to say" },
                   ].map((opt) => (
                     <button
                       key={opt.value}

@@ -14,8 +14,20 @@ from models.user import User
 from models.patient import PatientProfile
 from models.prediction_history import PredictionHistory
 from models.report import MedicalReport
+from utils.health_calculations import calculate_age, calculate_bmi, bmi_category, normalize_gender
 
 logger = logging.getLogger(__name__)
+
+# Fields that live on PatientProfile and are settable via PUT /patient/profile
+# (and, transitively, patient registration onboarding). Single place that
+# defines "what a patient can edit about their health profile" — reused by
+# both the update and the completeness check so the two can't drift apart.
+_UPDATABLE_FIELDS = [
+    "dob", "gender", "blood_group", "phone", "address", "emergency_contact", "medical_history",
+    "height_cm", "weight_kg", "smoking", "physical_activity_level",
+    "family_history_diabetes", "family_history_cvd",
+    "allergies", "current_medications", "dietary_preference",
+]
 
 
 class PatientService:
@@ -32,15 +44,66 @@ class PatientService:
         return profile
 
     @staticmethod
-    def update_profile(db: Session, user_id: str, data: Dict[str, Any]) -> PatientProfile:
-        """Update patient profile details."""
-        profile = PatientService.get_or_create_profile(db, user_id)
-        for key in ["dob", "gender", "blood_group", "phone", "address", "emergency_contact", "medical_history"]:
+    def update_profile(db: Session, user: User, data: Dict[str, Any]) -> PatientProfile:
+        """Update patient profile details. Boolean fields are allowed to be
+        explicitly set to False (e.g. un-checking "I smoke"), so this only
+        skips keys the caller didn't send at all, not falsy values."""
+        profile = PatientService.get_or_create_profile(db, user.id)
+
+        if "gender" in data and data["gender"] is not None:
+            data["gender"] = normalize_gender(data["gender"]) or data["gender"]
+
+        for key in _UPDATABLE_FIELDS:
             if key in data and data[key] is not None:
                 setattr(profile, key, data[key])
+
+        # Gender is a single canonical value across the whole app (see
+        # utils.health_calculations) — when the patient sets/changes their
+        # clinical gender here, keep User.gender (drives the avatar/UI) in
+        # sync too, instead of letting the two fields diverge.
+        if profile.gender and user.gender != profile.gender:
+            user.gender = profile.gender
+
         db.commit()
         db.refresh(profile)
         return profile
+
+    @staticmethod
+    def is_profile_complete(profile: PatientProfile) -> bool:
+        return bool(profile.dob and profile.gender and profile.height_cm and profile.weight_kg)
+
+    @staticmethod
+    def serialize_profile(user: User, profile: PatientProfile) -> Dict[str, Any]:
+        """Canonical patient-facing profile representation — includes
+        derived age/BMI (never stored) and profile_complete, so every
+        consumer (GET /patient/profile, onboarding review step, doctor
+        patient-detail view) computes these identically."""
+        bmi = calculate_bmi(profile.height_cm, profile.weight_kg)
+        return {
+            "user_id": user.id,
+            "name": user.name,
+            "email": user.email,
+            "dob": profile.dob,
+            "age": calculate_age(profile.dob),
+            "gender": profile.gender,
+            "blood_group": profile.blood_group,
+            "phone": profile.phone,
+            "address": profile.address,
+            "emergency_contact": profile.emergency_contact,
+            "medical_history": profile.medical_history,
+            "height_cm": profile.height_cm,
+            "weight_kg": profile.weight_kg,
+            "bmi": bmi,
+            "bmi_category": bmi_category(bmi),
+            "smoking": bool(profile.smoking),
+            "physical_activity_level": profile.physical_activity_level,
+            "family_history_diabetes": bool(profile.family_history_diabetes),
+            "family_history_cvd": bool(profile.family_history_cvd),
+            "allergies": profile.allergies,
+            "current_medications": profile.current_medications,
+            "dietary_preference": profile.dietary_preference,
+            "profile_complete": PatientService.is_profile_complete(profile),
+        }
 
     @staticmethod
     def save_prediction(
